@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.custom.customManageSystem.dao.ICustomDao;
+import com.custom.customManageSystem.entity.Page;
 import com.custom.customManageSystem.model.Custom;
 import com.custom.customManageSystem.service.ICustomService;
 
@@ -64,6 +65,17 @@ public class CustomServiceImpl implements ICustomService{
 	@Override
 	public List<Custom> checkSingle(String carcode, String carframecode) {
 		return this.customDao.checkSingle(carcode, carframecode);
+	}
+
+	@Override
+	public int selectCountByCondition(Custom custom, String time1, String time2) {
+		return this.customDao.selectCountByCondition(custom, time1, time2);
+	}
+
+	@Override
+	public List<Custom> selectByConditionPage(Custom custom, Page page,
+			String time1, String time2) {
+		return this.customDao.selectByConditionPage(custom, page, time1, time2);
 	}
 	
 	

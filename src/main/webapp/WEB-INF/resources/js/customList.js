@@ -24,15 +24,50 @@ $(document)
 					});
 					
 					/**
+					 * 搜索
+					 */
+					$("#btn_search").click(function() {
+						var carcode = $("#form_custom #carCode").val();
+						var carFrameCode = $("#form_custom #carFrameCode").val();
+						if ($.trim(carcode) == "" && $.trim(carFrameCode) == "") {
+							alert("至少输入一个搜索条件");
+						}else {
+							var basePath = $("#basePath").val();
+							$("#form_custom").attr("action", basePath + "custom/showCustom");
+							$("#form_custom").submit();
+						}
+					});
+					
+					/**
+					 * 删除选中
+					 */
+					$("#btn_delete").click(function() {
+						var isSelected = false;
+						$("input[name^='customids']").each(function(i) {
+							var isCheck = $(this).prop("checked");
+							if (isCheck) {
+								isSelected = true;
+								return false;
+							}
+						});
+						if (!isSelected) {
+							alert("至少勾选一个进行删除！");
+						}
+						if(confirm("确定要删除吗？")){
+							var basePath = $("#basePath").val();
+							$("#form_custom").attr("action", basePath + "custom/delCustom.do");
+							$("#form_custom").submit();
+						}
+					});
+					
+					/**
 					 * 单击行请求custom详细信息
 					 */
 					$(".table tbody tr")
 							.click(
 									function() {
-										var id = $(this).find("td").eq(0)
-												.html();
-										$
-												.post(
+										var id = $(this).find("td").eq(0).find("input").val();
+										$.post(
 														"getCustom.do",
 														{
 															customid : id
@@ -294,6 +329,16 @@ $(document)
 				});
 
 /**
+ * 翻页
+ */
+function changeCurrentPage(currentPage){
+	$("#currentPage").val(currentPage);
+	var basePath = $("#basePath").val();
+	$("#form_custom").attr("action", basePath + "custom/showCustom");
+	$("#form_custom").submit();
+}
+
+/**
  * 编辑custom
  * @param action 访问地址
  * @returns {Boolean}
@@ -508,37 +553,4 @@ function updateCustom(action) {
 			}
 		});
 	}
-}
-
-/**
- * 搜索校验
- * @returns {Boolean}
- */
-function checkSearch() {
-	var carcode = $("#form_custom_search #carCode").val();
-	var carFrameCode = $("#form_custom_search #carFrameCode").val();
-	if ($.trim(carcode) == "" && $.trim(carFrameCode) == "") {
-		alert("至少输入一个搜索条件");
-		return false;
-	}
-	return true;
-}
-
-/**
- * 删除校验
- */
-function checkDel() {
-	var isSelected = false;
-	$("input[name^='customids']").each(function(i) {
-		var isCheck = $(this).prop("checked");
-		if (isCheck) {
-			isSelected = true;
-			return false;
-		}
-	});
-	if (!isSelected) {
-		alert("至少勾选一个！");
-		return isSelected;
-	}
-	return confirm("确定要删除吗？");
 }

@@ -88,28 +88,27 @@
 			</div>
 			<div class="col-sm-11">
 				<div class="col-sm-8" >
-					<form id="form_custom_search" role="form" 
-						action="${pageContext.request.contextPath}/custom/search.do" onsubmit="return checkSearch();" 
-						method="post">
+					<form id="form_custom" role="form" 
+						action="${pageContext.request.contextPath}/custom/showCustom" method="post">
 						<fieldset align="center">
 							<legend>模糊条件搜索</legend>
 						      	<label>车牌号</label>
+						      	<input type="hidden" id="currentPage" name="currentPage" value="${page.currentPage }"/>
+						      	<input type="hidden" id="basePath" value="${pageContext.request.contextPath }/"/>
 						      	<input type="text" id="carCode" name="carCode" 
 						         	placeholder="车牌号"  value="${carCode }" />
 						      	<label style="margin-left: 20px;">车架号</label>
 						      	<input type="text" id="carFrameCode" name="carFrameCode" 
 						      		placeholder="车架号"  value="${carFrameCode }" />
-						      	<button type="submit" style="margin-left: 20px;" class="btn btn-default">搜索</button>
+						      	<button id="btn_search" style="margin-left: 20px;" class="btn btn-default">搜索</button>
+						      	<button id="btn_delete" style="margin-left: 20px;" class="btn btn-default">删除选中</button>
 						</fieldset>
-					</form>
-					<form id="form_custom" class="form-inline" role="form" 
-						action="${pageContext.request.contextPath}/custom/delCustom.do" 
-						method="post" onsubmit="return checkDel();">
 						<fieldset align="center">
 							<legend>客户列表</legend>
 							<table class="table table-bordered table-condensed table-striped table-hover">
 								<thead>
 									<tr align="center">
+										<th><input type="checkbox" id="selectAll" />全选</th>
 										<th>车牌号</th>
 										<th>联系电话</th>
 										<th>车架号</th>
@@ -120,7 +119,7 @@
 								<tbody>
 									<c:forEach items="${customs}" var="custom">
 										<tr>
-											<td style="display: none;">${custom.customid }</td>
+											<td><input type="checkbox" name="customids" id="selectCustom" value="${custom.customid }" /></td>
 											<td>${custom.licenseplates }</td>
 											<td>${custom.phonenum }</td>
 											<td>${custom.carframecode }</td>
@@ -131,6 +130,20 @@
 								</tbody>
 							</table>
 						</fieldset>
+						<div class='page fix'>
+							共 <b>${page.totalCount}</b> 条
+							<c:if test="${page.currentPage != 1}">
+								<a href="javascript:changeCurrentPage('1')" class='first'>首页</a>
+								<a href="javascript:changeCurrentPage('${page.currentPage-1}')" class='pre'>上一页</a>
+							</c:if>
+							当前第<span>${page.currentPage}/${page.totalPage}</span>页
+							<c:if test="${page.currentPage != page.totalPage}">
+								<a href="javascript:changeCurrentPage('${page.currentPage+1}')" class='next'>下一页</a>
+								<a href="javascript:changeCurrentPage('${page.totalPage}')" class='last'>末页</a>
+							</c:if>
+							跳至&nbsp;<input id="currentPageText" type='text' value='${page.currentPage}' class='allInput w28' />&nbsp;页&nbsp;
+							<a href="javascript:changeCurrentPage($('#currentPageText').val())" class='go'>GO</a>
+						</div>
 					</form>
 				</div>
 				<div class="col-sm-4" >
