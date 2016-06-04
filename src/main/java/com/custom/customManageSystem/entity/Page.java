@@ -7,14 +7,63 @@ package com.custom.customManageSystem.entity;
  * 
  */
 public class Page {
-
-	private int currentPage = 1;
+	
+	/**
+	 * 当前页
+	 */
+	private int currentPage;
+	/**
+	 * 总条数
+	 */
 	private int totalCount;
+	/**
+	 * 总页数
+	 */
 	private int totalPage;
+	/**
+	 * 下一页
+	 */
 	private int nextPage;
+	/**
+	 * 上一页
+	 */
 	private int prePage;
+	/**
+	 * 查询数据库limit开头
+	 */
+	private int dbIndex;
+	/**
+	 * 每页条数
+	 */
 	private int size = 20;
 
+	/**
+	 * 根据当前对象中属性值计算并设置相关属性值
+	 */
+	public void count() {
+		// 计算总页数
+		int totalPageTemp = this.totalCount / this.size;
+		int plus = (this.totalCount % this.size) == 0 ? 0 : 1;
+		totalPageTemp = totalPageTemp + plus;
+		if(totalPageTemp <= 0) {
+			totalPageTemp = 1;
+		}
+		this.totalPage = totalPageTemp;
+		
+		// 设置当前页数
+		// 总页数小于当前页数，应将当前页数设置为总页数
+		if(this.totalPage < this.currentPage) {
+			this.currentPage = this.totalPage;
+		}
+		// 当前页数小于1设置为1
+		if(this.currentPage < 1) {
+			this.currentPage = 1;
+		}
+		
+		// 设置limit的参数开头
+		this.dbIndex = (this.currentPage - 1) * this.size;
+	}
+	
 	public int getCurrentPage() {
 		return currentPage;
 	}
@@ -63,4 +112,11 @@ public class Page {
 		this.size = size;
 	}
 
+	public int getDbIndex() {
+		return dbIndex;
+	}
+
+	public void setDbIndex(int dbIndex) {
+		this.dbIndex = dbIndex;
+	}
 }
