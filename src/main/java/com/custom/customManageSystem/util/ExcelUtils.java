@@ -66,14 +66,14 @@ public class ExcelUtils {
 			    	firsttime = firstCell.getContents();
 			    }
 			    if(startCell.getType() == CellType.DATE){
-			    	starttime = formatDate2Str(((DateCell)firstCell).getDate());
+			    	starttime = formatDate2Str(((DateCell)startCell).getDate());
 			    }else {
-			    	starttime = firstCell.getContents();
+			    	starttime = startCell.getContents();
 			    }
 			    if(endCell.getType() == CellType.DATE){
-			    	endtime = formatDate2Str(((DateCell)firstCell).getDate());
+			    	endtime = formatDate2Str(((DateCell)endCell).getDate());
 			    }else {
-			    	endtime = firstCell.getContents();
+			    	endtime = endCell.getContents();
 			    }
 			    String insurance = sheet.getCell(13,i).getContents();
 			    String insurancecode = sheet.getCell(14,i).getContents();
