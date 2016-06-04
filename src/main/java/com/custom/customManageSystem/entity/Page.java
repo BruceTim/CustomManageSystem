@@ -21,14 +21,6 @@ public class Page {
 	 */
 	private int totalPage;
 	/**
-	 * 下一页
-	 */
-	private int nextPage;
-	/**
-	 * 上一页
-	 */
-	private int prePage;
-	/**
 	 * 查询数据库limit开头
 	 */
 	private int dbIndex;
@@ -86,22 +78,6 @@ public class Page {
 
 	public void setTotalPage(int totalPage) {
 		this.totalPage = totalPage;
-	}
-
-	public int getNextPage() {
-		return nextPage;
-	}
-
-	public void setNextPage(int nextPage) {
-		this.nextPage = nextPage;
-	}
-
-	public int getPrePage() {
-		return prePage;
-	}
-
-	public void setPrePage(int prePage) {
-		this.prePage = prePage;
 	}
 
 	public int getSize() {
