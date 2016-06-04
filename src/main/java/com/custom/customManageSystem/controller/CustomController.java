@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.alibaba.fastjson.JSON;
+import com.custom.customManageSystem.entity.Page;
 import com.custom.customManageSystem.model.Custom;
 import com.custom.customManageSystem.model.User;
 import com.custom.customManageSystem.service.ICustomService;
@@ -33,7 +35,10 @@ public class CustomController {
 	private ICustomService customService;
 	
 	@RequestMapping("/showCustom")
-	public String showCustom(HttpServletResponse response, HttpSession session, ModelMap model){
+	public String showCustom(@ModelAttribute Page page, HttpServletRequest request, HttpServletResponse response, 
+			HttpSession session, ModelMap model, 
+			@RequestParam(value="carCode", defaultValue="") String licensePlates, 
+			@RequestParam(value="carFrameCode", defaultValue="") String carFrameCode){
 		response.setContentType("text/html;charset=utf-8");
 		PrintWriter out = null;
 		try {
@@ -43,6 +48,39 @@ public class CustomController {
 				out.println("<script>alert('你还没有登录或登录已过期，请登录！');location='../login';</script>");
 				return null;
 			}
+			if("".equals(licensePlates) && "".equals(carFrameCode)){
+				licensePlates = (String) session.getAttribute("carCode");
+				carFrameCode = (String) session.getAttribute("carFrameCode");
+				session.removeAttribute("carCode");
+				session.removeAttribute("carFrameCode");
+			}
+			Custom custom = new Custom();
+			custom.setLicenseplates(licensePlates);
+			custom.setCarframecode(carFrameCode);
+			int totalCount = customService.selectCountByCondition(custom, null, null);
+			page.setTotalCount(totalCount);
+			page.count();
+			List<Custom> customs = customService.selectByConditionPage(custom, page, null, null);
+			if(user.getRole() == 2){
+				String phone = "";
+				StringBuffer phoneBuffer = null;
+				String[] phones = null;
+				for(Custom c:customs){
+					phoneBuffer = new StringBuffer();
+					phone = c.getPhonenum();
+					phones = phone.split(",");
+					for(String p:phones){
+						phoneBuffer.append(p.substring(0, 3)).append("****").append(p.substring(p.length() - 5, p.length() - 1)).append(",");
+					}
+					phoneBuffer.deleteCharAt(phoneBuffer.length()-1);
+					c.setPhonenum(phoneBuffer.toString());
+				}
+			}
+			
+			model.addAttribute("carCode", licensePlates);
+			model.addAttribute("carFrameCode", carFrameCode);
+			model.addAttribute("customs", customs);
+			model.addAttribute("page", page);
 		}catch(Exception e){
 			e.printStackTrace();
 			return "redirect:../500";
@@ -233,36 +271,36 @@ public class CustomController {
 		return "input";
 	}
 	
-	@RequestMapping(value="/search.do", method=RequestMethod.POST)
-	public String searchCustom(HttpSession session, HttpServletResponse response, @RequestParam("carCode") String licensePlates, @RequestParam("carFrameCode") String carFrameCode, ModelMap model){
-		response.setContentType("text/html;charset=utf-8");
-		PrintWriter out = null;
-		try {
-			out = response.getWriter();
-			User user = (User) session.getAttribute("loginuser");
-			if(user == null){
-				out.println("<script>alert('你还没有登录或登录已过期，请登录！');location='../login';</script>");
-				return null;
-			}
-			if("".equals(licensePlates)){
-				licensePlates = null;
-			}
-			if("".equals(carFrameCode)){
-				carFrameCode = null;
-			}
-			Custom custom = new Custom();
-			custom.setLicenseplates(licensePlates);
-			custom.setCarframecode(carFrameCode);
-			List<Custom> customs = customService.selectByCondition(custom, null, null);
-			model.addAttribute("carCode", licensePlates);
-			model.addAttribute("carFrameCode", carFrameCode);
-			model.addAttribute("customs", customs);
-			return "showCustom";
-		}catch(Exception e){
-			e.printStackTrace();
-			return "redirect:../500";
-		}
-	}
+//	@RequestMapping(value="/search.do", method=RequestMethod.POST)
+//	public String searchCustom(HttpSession session, HttpServletResponse response, @RequestParam("carCode") String licensePlates, @RequestParam("carFrameCode") String carFrameCode, ModelMap model){
+//		response.setContentType("text/html;charset=utf-8");
+//		PrintWriter out = null;
+//		try {
+//			out = response.getWriter();
+//			User user = (User) session.getAttribute("loginuser");
+//			if(user == null){
+//				out.println("<script>alert('你还没有登录或登录已过期，请登录！');location='../login';</script>");
+//				return null;
+//			}
+//			if("".equals(licensePlates)){
+//				licensePlates = null;
+//			}
+//			if("".equals(carFrameCode)){
+//				carFrameCode = null;
+//			}
+//			Custom custom = new Custom();
+//			custom.setLicenseplates(licensePlates);
+//			custom.setCarframecode(carFrameCode);
+//			List<Custom> customs = customService.selectByCondition(custom, null, null);
+//			model.addAttribute("carCode", licensePlates);
+//			model.addAttribute("carFrameCode", carFrameCode);
+//			model.addAttribute("customs", customs);
+//			return "showCustom";
+//		}catch(Exception e){
+//			e.printStackTrace();
+//			return "redirect:../500";
+//		}
+//	}
 	
 	@RequestMapping(value="/searchOut.do", method=RequestMethod.POST)
 	public String searchCustomOut(HttpSession session, HttpServletResponse response, @RequestParam("time1") String time1, @RequestParam("time2") String time2, ModelMap model){
@@ -290,8 +328,8 @@ public class CustomController {
 		}
 	}
 	
-	@RequestMapping(value="/delCustom.do", method=RequestMethod.POST)
-	public String delCustom(HttpSession session, HttpServletResponse response, @RequestParam("customids") Integer[] customids, ModelMap model){
+	@RequestMapping(value="/delCustom.do")
+	public String delCustom(HttpServletRequest request, HttpSession session, HttpServletResponse response, @RequestParam("customids") Integer[] customids, ModelMap model, RedirectAttributes attrs){
 		response.setContentType("text/html;charset=utf-8");
 		PrintWriter out = null;
 		try {
@@ -301,9 +339,13 @@ public class CustomController {
 				out.println("<script>alert('你还没有登录或登录已过期，请登录！');location='../login';</script>");
 				return null;
 			}
+			String carCode = request.getParameter("carCode");
+			String carFrameCode = request.getParameter("carFrameCode");
 			boolean flag = customService.deleteMoreByPrimaryKey(customids) > 0;
 			if(flag){
-				return "showCustom";
+				session.setAttribute("carCode", carCode);
+				session.setAttribute("carFrameCode",carFrameCode);
+				return "redirect:showCustom";
 			}
 			out = response.getWriter();
 			out.println("<script>history.go(-1);</script>");
@@ -323,6 +365,16 @@ public class CustomController {
 		Custom custom = customService.selectByPrimaryKey(customid);
 		if(custom == null){
 			return "none";
+		}
+		if(user.getRole() == 2){
+			String phone = custom.getPhonenum();
+			StringBuffer phoneBuffer = new StringBuffer();
+			String[] phones = phone.split(",");
+			for(String p:phones){
+				phoneBuffer.append(p.substring(0, 3)).append("****").append(p.substring(p.length() - 5, p.length() - 1)).append(",");
+			}
+			phoneBuffer.deleteCharAt(phoneBuffer.length()-1);
+			custom.setPhonenum(phoneBuffer.toString());
 		}
 		return JSON.toJSONString(custom);
 	}
