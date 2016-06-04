@@ -70,47 +70,18 @@
     	AND carFrameCode = #{carframecode,jdbcType=VARCHAR} 
     </if>
   </select>
-    
-  <select id="selectByCondition" resultMap="Custom">
-    select 
-    <include refid="Base_Column_List" />
+  
+  <select id="selectCountByCondition" resultType="java.lang.Integer">
+    select count(*) 
     from custom 
     where 1 = 1 
     <if test="custom.licenseplates != null and '' != custom.licenseplates">
     	AND licensePlates LIKE CONCAT(CONCAT('%',#{custom.licenseplates,jdbcType=VARCHAR}),'%') 
     </if>
-    <!--  
-    <if test="idcard != null and '' != idcard">
-    	AND idcard= #{idcard,jdbcType=VARCHAR}
-    </if>
-    <if test="agencycode != null and '' != agencycode">
-    	AND agencyCode= #{agencycode,jdbcType=VARCHAR}
-    </if>
-    
-    <if test="phonenum != null and '' != phonenum">
-    	AND phoneNum= #{phonenum,jdbcType=VARCHAR}
-    </if>
-    <if test="carowner != null and '' != carowner">
-    	AND carOwner= #{carowner,jdbcType=VARCHAR}
-    </if>
-    <if test="insurer != null and '' != insurer">
-    	AND insurer= #{insurer,jdbcType=VARCHAR}
-    </if>
-    <if test="insured != null and '' != insured">
-    	AND insured= #{insured,jdbcType=VARCHAR}
-    </if>
-    <if test="carmodel != null and '' != carmodel">
-    	AND carModel= #{carmodel,jdbcType=VARCHAR}
-    </if>
-    -->
     <if test="custom.carframecode != null and '' != custom.carframecode">
     	AND carFrameCode LIKE CONCAT(CONCAT('%',#{custom.carframecode,jdbcType=VARCHAR}),'%')
     </if>
     <!-- 
-    <if test="enginecode != null and '' != enginecode">
-    	AND engineCode= #{enginecode,jdbcType=VARCHAR}
-    </if>
-    
     <if test="firsttime != null and '' != firsttime">
     	AND firstTime= #{firsttime,jdbcType=DATE}
     </if>
@@ -127,60 +98,47 @@
     	AND endTime &lt;= #{time2,jdbcType=VARCHAR}
     </if>
     -->
+  </select>
+  
+  <select id="selectByConditionPage" resultMap="Custom">
+    select 
+    <include refid="Base_Column_List" />
+    from custom 
+    where 1 = 1 
+    <if test="custom.licenseplates != null and '' != custom.licenseplates">
+    	AND licensePlates LIKE CONCAT(CONCAT('%',#{custom.licenseplates,jdbcType=VARCHAR}),'%') 
+    </if>
+    <if test="custom.carframecode != null and '' != custom.carframecode">
+    	AND carFrameCode LIKE CONCAT(CONCAT('%',#{custom.carframecode,jdbcType=VARCHAR}),'%')
+    </if>
     <!-- 
-    <if test="insurance != null and '' != insurance">
-    	AND insurance= #{insurance,jdbcType=VARCHAR}
+    <if test="time1 != null">
+    	AND endTime &gt;= #{time1,jdbcType=VARCHAR}
     </if>
-    <if test="insurancecode != null and '' != insurancecode">
-    	AND insuranceCode= #{insurancecode,jdbcType=VARCHAR}
+    <if test="time2 != null">
+    	AND endTime &lt;= #{time2,jdbcType=VARCHAR}
     </if>
-    <if test="cardamage != null and '' != cardamage">
-    	AND carDamage= #{cardamage,jdbcType=VARCHAR}
+    -->
+    order by customid limit #{page.dbIndex} , #{page.size}
+  </select>
+  
+  <select id="selectByCondition" resultMap="Custom">
+    select 
+    <include refid="Base_Column_List" />
+    from custom 
+    where 1 = 1 
+    <if test="custom.licenseplates != null and '' != custom.licenseplates">
+    	AND licensePlates LIKE CONCAT(CONCAT('%',#{custom.licenseplates,jdbcType=VARCHAR}),'%') 
     </if>
-    <if test="robbery != null and '' != robbery">
-    	AND robbery= #{robbery,jdbcType=VARCHAR}
+    <if test="custom.carframecode != null and '' != custom.carframecode">
+    	AND carFrameCode LIKE CONCAT(CONCAT('%',#{custom.carframecode,jdbcType=VARCHAR}),'%')
     </if>
-    <if test="three20 != null and '' != three20">
-    	AND three20= #{three20,jdbcType=VARCHAR}
+    <!-- 
+    <if test="time1 != null">
+    	AND endTime &gt;= #{time1,jdbcType=VARCHAR}
     </if>
-    <if test="three50 != null and '' != three50">
-    	AND three50= #{three50,jdbcType=VARCHAR}
-    </if>
-    <if test="three100 != null and '' != three100">
-    	AND three100= #{three100,jdbcType=VARCHAR}
-    </if>
-    <if test="three150 != null and '' != three150">
-    	AND three150= #{three150,jdbcType=VARCHAR}
-    </if>
-    <if test="driver != null and '' != driver">
-    	AND driver= #{driver,jdbcType=VARCHAR}
-    </if>
-    <if test="passenger != null and '' != passenger">
-    	AND passenger= #{passenger,jdbcType=VARCHAR}
-    </if>
-    <if test="foreignglass != null and '' != foreignglass">
-    	AND foreignGlass= #{foreignglass,jdbcType=VARCHAR}
-    </if>
-    <if test="domesticglass != null and '' != domesticglass">
-    	AND domesticGlass= #{domesticglass,jdbcType=VARCHAR}
-    </if>
-    <if test="nick2 != null and '' != nick2">
-    	AND nick2= #{nick2,jdbcType=VARCHAR}
-    </if>
-    <if test="nick5 != null and '' != nick5">
-    	AND nick5= #{nick5,jdbcType=VARCHAR}
-    </if>
-    <if test="nick10 != null and '' != nick10">
-    	AND nick10= #{nick10,jdbcType=VARCHAR}
-    </if>
-    <if test="nick15 != null and '' != nick15">
-    	AND nick15= #{nick15,jdbcType=VARCHAR}
-    </if>
-    <if test="autoignition != null and '' != autoignition">
-    	AND autoIgnition= #{autoignition,jdbcType=VARCHAR}
-    </if>
-    <if test="wadding != null and '' != wadding">
-    	AND wadding= #{wadding,jdbcType=VARCHAR}
+    <if test="time2 != null">
+    	AND endTime &lt;= #{time2,jdbcType=VARCHAR}
     </if>
     -->
   </select>
