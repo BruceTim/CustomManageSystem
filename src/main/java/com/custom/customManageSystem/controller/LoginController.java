@@ -58,7 +58,7 @@ public class LoginController {
 				boolean flag = loginRecordService.insert(record) > 0;
 				user.setUpwd(userpwd);
 				model.addAttribute("loginuser", user);
-				return "welcome";
+				return "redirect:showCustom";
 			}else {
 				out = response.getWriter();
 				out.println("<script>alert('用户名或密码错误，登录失败！');history.go(-1);</script>");
