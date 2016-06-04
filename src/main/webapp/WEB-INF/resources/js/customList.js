@@ -31,6 +31,7 @@ $(document)
 						var carFrameCode = $("#form_custom #carFrameCode").val();
 						if ($.trim(carcode) == "" && $.trim(carFrameCode) == "") {
 							alert("至少输入一个搜索条件");
+							return false;
 						}else {
 							var basePath = $("#basePath").val();
 							$("#form_custom").attr("action", basePath + "custom/showCustom");
@@ -52,6 +53,7 @@ $(document)
 						});
 						if (!isSelected) {
 							alert("至少勾选一个进行删除！");
+							return false;
 						}
 						if(confirm("确定要删除吗？")){
 							var basePath = $("#basePath").val();
