@@ -21,6 +21,7 @@
     <result column="carDamage" jdbcType="VARCHAR" property="cardamage" />
     <result column="robbery" jdbcType="VARCHAR" property="robbery" />
     <result column="three20" jdbcType="VARCHAR" property="three20" />
+    <result column="three30" jdbcType="VARCHAR" property="three30" />
     <result column="three50" jdbcType="VARCHAR" property="three50" />
     <result column="three100" jdbcType="VARCHAR" property="three100" />
     <result column="three150" jdbcType="VARCHAR" property="three150" />
@@ -38,7 +39,7 @@
   <sql id="Base_Column_List">
     customid, licensePlates, idcard, agencyCode, phoneNum, carOwner, insurer, insured, 
     carModel, carFrameCode, engineCode, firstTime, startTime, endTime, insurance, insuranceCode, 
-    carDamage, robbery, three20, three50, three100, three150, driver, passenger, foreignGlass, 
+    carDamage, robbery, three20, three30, three50, three100, three150, driver, passenger, foreignGlass, 
     domesticGlass, nick2, nick5, nick10, nick15, autoIgnition, wading
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="Custom">
@@ -163,7 +164,7 @@
       carFrameCode, engineCode, firstTime, 
       startTime, endTime, insurance, 
       insuranceCode, carDamage, robbery, 
-      three20, three50, three100, 
+      three20, three30, three50, three100, 
       three150, driver, passenger, 
       foreignGlass, domesticGlass, nick2, 
       nick5, nick10, nick15, 
@@ -174,7 +175,8 @@
       #{carframecode,jdbcType=VARCHAR}, #{enginecode,jdbcType=VARCHAR}, #{firsttime,jdbcType=VARCHAR}, 
       #{starttime,jdbcType=VARCHAR}, #{endtime,jdbcType=VARCHAR}, #{insurance,jdbcType=VARCHAR}, 
       #{insurancecode,jdbcType=VARCHAR}, #{cardamage,jdbcType=VARCHAR}, #{robbery,jdbcType=VARCHAR}, 
-      #{three20,jdbcType=VARCHAR}, #{three50,jdbcType=VARCHAR}, #{three100,jdbcType=VARCHAR}, 
+      #{three20,jdbcType=VARCHAR}, #{three30,jdbcType=VARCHAR}, #{three50,jdbcType=VARCHAR},
+      #{three100,jdbcType=VARCHAR}, 
       #{three150,jdbcType=VARCHAR}, #{driver,jdbcType=VARCHAR}, #{passenger,jdbcType=VARCHAR}, 
       #{foreignglass,jdbcType=VARCHAR}, #{domesticglass,jdbcType=VARCHAR}, #{nick2,jdbcType=VARCHAR}, 
       #{nick5,jdbcType=VARCHAR}, #{nick10,jdbcType=VARCHAR}, #{nick15,jdbcType=VARCHAR}, 
@@ -239,6 +241,9 @@
       </if>
       <if test="three20 != null">
         three20,
+      </if>
+      <if test="three30 != null">
+        three30,
       </if>
       <if test="three50 != null">
         three50,
@@ -337,6 +342,9 @@
       </if>
       <if test="three20 != null">
         #{three20,jdbcType=VARCHAR},
+      </if>
+      <if test="three30 != null">
+        #{three30,jdbcType=VARCHAR},
       </if>
       <if test="three50 != null">
         #{three50,jdbcType=VARCHAR},
