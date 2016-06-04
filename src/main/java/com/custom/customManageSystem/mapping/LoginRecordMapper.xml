@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.custom.customManageSystem.dao.ILoginRecordDao">
+  <resultMap id="LoginRecord" type="com.custom.customManageSystem.model.LoginRecord">
+    <id column="recordid" jdbcType="INTEGER" property="recordid" />
+    <result column="logintime" property="logintime" />
+    <result column="ipaddress" jdbcType="VARCHAR" property="ipaddress" />
+    <association property="user" column="userid" javaType="com.custom.customManageSystem.model.User">
+    	<id column="uid" property="uid" jdbcType="INTEGER" />
+	    <result column="uname" property="uname" jdbcType="VARCHAR" />
+	    <result column="upwd" property="upwd" jdbcType="VARCHAR" />
+	    <result column="role" property="role" jdbcType="INTEGER" />
+	    <result column="lasttime" property="lasttime" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+  
+  <select id="selectByUid" parameterType="java.lang.Integer" resultMap="LoginRecord">
+    select 
+    lr.recordid, 
+    lr.uid as userid, 
+    lr.logintime, 
+    lr.ipaddress, 
+    u.uid, 
+    u.uname, 
+    u.upwd, 
+    u.role, 
+    u.lasttime 
+    from loginrecord lr 
+    left outer join user u 
+    on lr.uid = u.uid 
+    where lr.uid = #{uid,jdbcType=INTEGER} 
+    order by lr.logintime desc
+  </select>
+  
+  <select id="selectByUname" parameterType="java.lang.String" resultMap="LoginRecord">
+    select 
+    lr.recordid, 
+    lr.uid as userid, 
+    lr.logintime, 
+    lr.ipaddress, 
+    u.uid, 
+    u.uname, 
+    u.upwd, 
+    u.role, 
+    u.lasttime 
+    from loginrecord lr 
+    left outer join user u 
+    on lr.uid = u.uid 
+    where u.uname like CONCAT(CONCAT("%", #{uname, jdbcType=VARCHAR), "%")) 
+    order by lr.logintime desc 
+  </select>
+  
+  <select id="selectAll" resultMap="LoginRecord">
+    select 
+    lr.recordid, 
+    lr.uid as userid, 
+    lr.logintime, 
+    lr.ipaddress, 
+    u.uid, 
+    u.uname, 
+    u.upwd, 
+    u.role, 
+    u.lasttime 
+    from loginrecord lr 
+    left outer join user u 
+    on lr.uid = u.uid 
+    order by lr.logintime desc
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from loginrecord
+    where recordid = #{recordid,jdbcType=INTEGER} 
+  </delete>
+  
+  <delete id="deleteMoreByPrimaryKey" parameterType="java.lang.Integer">
+    delete from loginrecord
+    where recordid in 
+    <foreach collection="array" item="recordid" index="index" open="(" separator="," close=")">
+    	#{recordid}
+    </foreach>
+  </delete>
+  
+  <insert id="insert" parameterType="com.custom.customManageSystem.model.LoginRecord">
+    insert into loginrecord (recordid, uid, logintime, 
+      ipaddress)
+    values (#{recordid,jdbcType=INTEGER}, #{user.uid,jdbcType=INTEGER}, #{logintime}, 
+      #{ipaddress,jdbcType=VARCHAR})
+  </insert>
+  
+</mapper>

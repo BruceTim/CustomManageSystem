@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.custom.customManageSystem.dao.ICustomDao">
+  <resultMap id="Custom" type="com.custom.customManageSystem.model.Custom">
+    <id column="customid" jdbcType="INTEGER" property="customid" />
+    <result column="licensePlates" jdbcType="VARCHAR" property="licenseplates" />
+    <result column="idcard" jdbcType="VARCHAR" property="idcard" />
+    <result column="agencyCode" jdbcType="VARCHAR" property="agencycode" />
+    <result column="phoneNum" jdbcType="VARCHAR" property="phonenum" />
+    <result column="carOwner" jdbcType="VARCHAR" property="carowner" />
+    <result column="insurer" jdbcType="VARCHAR" property="insurer" />
+    <result column="insured" jdbcType="VARCHAR" property="insured" />
+    <result column="carModel" jdbcType="VARCHAR" property="carmodel" />
+    <result column="carFrameCode" jdbcType="VARCHAR" property="carframecode" />
+    <result column="engineCode" jdbcType="VARCHAR" property="enginecode" />
+    <result column="firstTime" jdbcType="VARCHAR" property="firsttime" />
+    <result column="startTime" jdbcType="VARCHAR" property="starttime" />
+    <result column="endTime" jdbcType="VARCHAR" property="endtime" />
+    <result column="insurance" jdbcType="VARCHAR" property="insurance" />
+    <result column="insuranceCode" jdbcType="VARCHAR" property="insurancecode" />
+    <result column="carDamage" jdbcType="VARCHAR" property="cardamage" />
+    <result column="robbery" jdbcType="VARCHAR" property="robbery" />
+    <result column="three20" jdbcType="VARCHAR" property="three20" />
+    <result column="three50" jdbcType="VARCHAR" property="three50" />
+    <result column="three100" jdbcType="VARCHAR" property="three100" />
+    <result column="three150" jdbcType="VARCHAR" property="three150" />
+    <result column="driver" jdbcType="VARCHAR" property="driver" />
+    <result column="passenger" jdbcType="VARCHAR" property="passenger" />
+    <result column="foreignGlass" jdbcType="VARCHAR" property="foreignglass" />
+    <result column="domesticGlass" jdbcType="VARCHAR" property="domesticglass" />
+    <result column="nick2" jdbcType="VARCHAR" property="nick2" />
+    <result column="nick5" jdbcType="VARCHAR" property="nick5" />
+    <result column="nick10" jdbcType="VARCHAR" property="nick10" />
+    <result column="nick15" jdbcType="VARCHAR" property="nick15" />
+    <result column="autoIgnition" jdbcType="VARCHAR" property="autoignition" />
+    <result column="wading" jdbcType="VARCHAR" property="wading" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    customid, licensePlates, idcard, agencyCode, phoneNum, carOwner, insurer, insured, 
+    carModel, carFrameCode, engineCode, firstTime, startTime, endTime, insurance, insuranceCode, 
+    carDamage, robbery, three20, three50, three100, three150, driver, passenger, foreignGlass, 
+    domesticGlass, nick2, nick5, nick10, nick15, autoIgnition, wading
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="Custom">
+    select 
+    <include refid="Base_Column_List" />
+    from custom 
+    where customid = #{customid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectMoreById" parameterType="java.lang.Integer" resultMap="Custom">
+    select 
+    <include refid="Base_Column_List" />
+    from custom 
+    where customid in 
+	<foreach collection="array" item="customid" index="index" open="(" separator="," close=")">
+    	#{customid}
+    </foreach>
+  </select>
+  
+  <select id="checkSingle" resultMap="Custom">
+    select 
+    <include refid="Base_Column_List" />
+    from custom 
+    where 1 = 1 
+    <if test="licenseplates != null and '' != licenseplates">
+    	AND licensePlates = #{licenseplates,jdbcType=VARCHAR}  
+    </if>
+  	 <if test="carframecode != null and '' != carframecode">
+    	AND carFrameCode = #{carframecode,jdbcType=VARCHAR} 
+    </if>
+  </select>
+    
+  <select id="selectByCondition" resultMap="Custom">
+    select 
+    <include refid="Base_Column_List" />
+    from custom 
+    where 1 = 1 
+    <if test="custom.licenseplates != null and '' != custom.licenseplates">
+    	AND licensePlates LIKE CONCAT(CONCAT('%',#{custom.licenseplates,jdbcType=VARCHAR}),'%') 
+    </if>
+    <!--  
+    <if test="idcard != null and '' != idcard">
+    	AND idcard= #{idcard,jdbcType=VARCHAR}
+    </if>
+    <if test="agencycode != null and '' != agencycode">
+    	AND agencyCode= #{agencycode,jdbcType=VARCHAR}
+    </if>
+    
+    <if test="phonenum != null and '' != phonenum">
+    	AND phoneNum= #{phonenum,jdbcType=VARCHAR}
+    </if>
+    <if test="carowner != null and '' != carowner">
+    	AND carOwner= #{carowner,jdbcType=VARCHAR}
+    </if>
+    <if test="insurer != null and '' != insurer">
+    	AND insurer= #{insurer,jdbcType=VARCHAR}
+    </if>
+    <if test="insured != null and '' != insured">
+    	AND insured= #{insured,jdbcType=VARCHAR}
+    </if>
+    <if test="carmodel != null and '' != carmodel">
+    	AND carModel= #{carmodel,jdbcType=VARCHAR}
+    </if>
+    -->
+    <if test="custom.carframecode != null and '' != custom.carframecode">
+    	AND carFrameCode LIKE CONCAT(CONCAT('%',#{custom.carframecode,jdbcType=VARCHAR}),'%')
+    </if>
+    <!-- 
+    <if test="enginecode != null and '' != enginecode">
+    	AND engineCode= #{enginecode,jdbcType=VARCHAR}
+    </if>
+    
+    <if test="firsttime != null and '' != firsttime">
+    	AND firstTime= #{firsttime,jdbcType=DATE}
+    </if>
+    
+    <if test="starttime != null and '' != starttime">
+    	AND startTime= #{starttime,jdbcType=DATE}
+    </if>
+    -->
+    <!-- 
+    <if test="time1 != null">
+    	AND endTime &gt;= #{time1,jdbcType=VARCHAR}
+    </if>
+    <if test="time2 != null">
+    	AND endTime &lt;= #{time2,jdbcType=VARCHAR}
+    </if>
+    -->
+    <!-- 
+    <if test="insurance != null and '' != insurance">
+    	AND insurance= #{insurance,jdbcType=VARCHAR}
+    </if>
+    <if test="insurancecode != null and '' != insurancecode">
+    	AND insuranceCode= #{insurancecode,jdbcType=VARCHAR}
+    </if>
+    <if test="cardamage != null and '' != cardamage">
+    	AND carDamage= #{cardamage,jdbcType=VARCHAR}
+    </if>
+    <if test="robbery != null and '' != robbery">
+    	AND robbery= #{robbery,jdbcType=VARCHAR}
+    </if>
+    <if test="three20 != null and '' != three20">
+    	AND three20= #{three20,jdbcType=VARCHAR}
+    </if>
+    <if test="three50 != null and '' != three50">
+    	AND three50= #{three50,jdbcType=VARCHAR}
+    </if>
+    <if test="three100 != null and '' != three100">
+    	AND three100= #{three100,jdbcType=VARCHAR}
+    </if>
+    <if test="three150 != null and '' != three150">
+    	AND three150= #{three150,jdbcType=VARCHAR}
+    </if>
+    <if test="driver != null and '' != driver">
+    	AND driver= #{driver,jdbcType=VARCHAR}
+    </if>
+    <if test="passenger != null and '' != passenger">
+    	AND passenger= #{passenger,jdbcType=VARCHAR}
+    </if>
+    <if test="foreignglass != null and '' != foreignglass">
+    	AND foreignGlass= #{foreignglass,jdbcType=VARCHAR}
+    </if>
+    <if test="domesticglass != null and '' != domesticglass">
+    	AND domesticGlass= #{domesticglass,jdbcType=VARCHAR}
+    </if>
+    <if test="nick2 != null and '' != nick2">
+    	AND nick2= #{nick2,jdbcType=VARCHAR}
+    </if>
+    <if test="nick5 != null and '' != nick5">
+    	AND nick5= #{nick5,jdbcType=VARCHAR}
+    </if>
+    <if test="nick10 != null and '' != nick10">
+    	AND nick10= #{nick10,jdbcType=VARCHAR}
+    </if>
+    <if test="nick15 != null and '' != nick15">
+    	AND nick15= #{nick15,jdbcType=VARCHAR}
+    </if>
+    <if test="autoignition != null and '' != autoignition">
+    	AND autoIgnition= #{autoignition,jdbcType=VARCHAR}
+    </if>
+    <if test="wadding != null and '' != wadding">
+    	AND wadding= #{wadding,jdbcType=VARCHAR}
+    </if>
+    -->
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from custom 
+    where customid = #{customid,jdbcType=INTEGER}
+  </delete>
+  
+  <delete id="deleteMoreByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from custom
+    where customid in 
+    <foreach collection="array" item="customid" index="index" open="(" separator="," close=")">
+    	#{customid}
+    </foreach>
+  </delete>
+  
+  <insert id="insert" parameterType="com.custom.customManageSystem.model.Custom">
+    insert into custom(customid, licensePlates, idcard, 
+      agencyCode, phoneNum, carOwner, 
+      insurer, insured, carModel, 
+      carFrameCode, engineCode, firstTime, 
+      startTime, endTime, insurance, 
+      insuranceCode, carDamage, robbery, 
+      three20, three50, three100, 
+      three150, driver, passenger, 
+      foreignGlass, domesticGlass, nick2, 
+      nick5, nick10, nick15, 
+      autoIgnition, wading)
+    values (#{customid,jdbcType=INTEGER}, #{licenseplates,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR}, 
+      #{agencycode,jdbcType=VARCHAR}, #{phonenum,jdbcType=VARCHAR}, #{carowner,jdbcType=VARCHAR}, 
+      #{insurer,jdbcType=VARCHAR}, #{insured,jdbcType=VARCHAR}, #{carmodel,jdbcType=VARCHAR}, 
+      #{carframecode,jdbcType=VARCHAR}, #{enginecode,jdbcType=VARCHAR}, #{firsttime,jdbcType=VARCHAR}, 
+      #{starttime,jdbcType=VARCHAR}, #{endtime,jdbcType=VARCHAR}, #{insurance,jdbcType=VARCHAR}, 
+      #{insurancecode,jdbcType=VARCHAR}, #{cardamage,jdbcType=VARCHAR}, #{robbery,jdbcType=VARCHAR}, 
+      #{three20,jdbcType=VARCHAR}, #{three50,jdbcType=VARCHAR}, #{three100,jdbcType=VARCHAR}, 
+      #{three150,jdbcType=VARCHAR}, #{driver,jdbcType=VARCHAR}, #{passenger,jdbcType=VARCHAR}, 
+      #{foreignglass,jdbcType=VARCHAR}, #{domesticglass,jdbcType=VARCHAR}, #{nick2,jdbcType=VARCHAR}, 
+      #{nick5,jdbcType=VARCHAR}, #{nick10,jdbcType=VARCHAR}, #{nick15,jdbcType=VARCHAR}, 
+      #{autoignition,jdbcType=VARCHAR}, #{wading,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.custom.customManageSystem.model.Custom">
+    insert into custom
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="customid != null">
+        customid,
+      </if>
+      <if test="licenseplates != null">
+        licensePlates,
+      </if>
+      <if test="idcard != null">
+        idcard,
+      </if>
+      <if test="agencycode != null">
+        agencyCode,
+      </if>
+      <if test="phonenum != null">
+        phoneNum,
+      </if>
+      <if test="carowner != null">
+        carOwner,
+      </if>
+      <if test="insurer != null">
+        insurer,
+      </if>
+      <if test="insured != null">
+        insured,
+      </if>
+      <if test="carmodel != null">
+        carModel,
+      </if>
+      <if test="carframecode != null">
+        carFrameCode,
+      </if>
+      <if test="enginecode != null">
+        engineCode,
+      </if>
+      <if test="firsttime != null">
+        firstTime,
+      </if>
+      <if test="starttime != null">
+        startTime,
+      </if>
+      <if test="endtime != null">
+        endTime,
+      </if>
+      <if test="insurance != null">
+        insurance,
+      </if>
+      <if test="insurancecode != null">
+        insuranceCode,
+      </if>
+      <if test="cardamage != null">
+        carDamage,
+      </if>
+      <if test="robbery != null">
+        robbery,
+      </if>
+      <if test="three20 != null">
+        three20,
+      </if>
+      <if test="three50 != null">
+        three50,
+      </if>
+      <if test="three100 != null">
+        three100,
+      </if>
+      <if test="three150 != null">
+        three150,
+      </if>
+      <if test="driver != null">
+        driver,
+      </if>
+      <if test="passenger != null">
+        passenger,
+      </if>
+      <if test="foreignglass != null">
+        foreignGlass,
+      </if>
+      <if test="domesticglass != null">
+        domesticGlass,
+      </if>
+      <if test="nick2 != null">
+        nick2,
+      </if>
+      <if test="nick5 != null">
+        nick5,
+      </if>
+      <if test="nick10 != null">
+        nick10,
+      </if>
+      <if test="nick15 != null">
+        nick15,
+      </if>
+      <if test="autoignition != null">
+        autoIgnition,
+      </if>
+      <if test="wading != null">
+        wading,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="customid != null">
+        #{customid,jdbcType=INTEGER},
+      </if>
+      <if test="licenseplates != null">
+        #{licenseplates,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null">
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="agencycode != null">
+        #{agencycode,jdbcType=VARCHAR},
+      </if>
+      <if test="phonenum != null">
+        #{phonenum,jdbcType=VARCHAR},
+      </if>
+      <if test="carowner != null">
+        #{carowner,jdbcType=VARCHAR},
+      </if>
+      <if test="insurer != null">
+        #{insurer,jdbcType=VARCHAR},
+      </if>
+      <if test="insured != null">
+        #{insured,jdbcType=VARCHAR},
+      </if>
+      <if test="carmodel != null">
+        #{carmodel,jdbcType=VARCHAR},
+      </if>
+      <if test="carframecode != null">
+        #{carframecode,jdbcType=VARCHAR},
+      </if>
+      <if test="enginecode != null">
+        #{enginecode,jdbcType=VARCHAR},
+      </if>
+      <if test="firsttime != null">
+        #{firsttime,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null">
+        #{starttime,jdbcType=VARCHAR},
+      </if>
+      <if test="endtime != null">
+        #{endtime,jdbcType=VARCHAR},
+      </if>
+      <if test="insurance != null">
+        #{insurance,jdbcType=VARCHAR},
+      </if>
+      <if test="insurancecode != null">
+        #{insurancecode,jdbcType=VARCHAR},
+      </if>
+      <if test="cardamage != null">
+        #{cardamage,jdbcType=VARCHAR},
+      </if>
+      <if test="robbery != null">
+        #{robbery,jdbcType=VARCHAR},
+      </if>
+      <if test="three20 != null">
+        #{three20,jdbcType=VARCHAR},
+      </if>
+      <if test="three50 != null">
+        #{three50,jdbcType=VARCHAR},
+      </if>
+      <if test="three100 != null">
+        #{three100,jdbcType=VARCHAR},
+      </if>
+      <if test="three150 != null">
+        #{three150,jdbcType=VARCHAR},
+      </if>
+      <if test="driver != null">
+        #{driver,jdbcType=VARCHAR},
+      </if>
+      <if test="passenger != null">
+        #{passenger,jdbcType=VARCHAR},
+      </if>
+      <if test="foreignglass != null">
+        #{foreignglass,jdbcType=VARCHAR},
+      </if>
+      <if test="domesticglass != null">
+        #{domesticglass,jdbcType=VARCHAR},
+      </if>
+      <if test="nick2 != null">
+        #{nick2,jdbcType=VARCHAR},
+      </if>
+      <if test="nick5 != null">
+        #{nick5,jdbcType=VARCHAR},
+      </if>
+      <if test="nick10 != null">
+        #{nick10,jdbcType=VARCHAR},
+      </if>
+      <if test="nick15 != null">
+        #{nick15,jdbcType=VARCHAR},
+      </if>
+      <if test="autoignition != null">
+        #{autoignition,jdbcType=VARCHAR},
+      </if>
+      <if test="wading != null">
+        #{wading,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.custom.customManageSystem.model.Custom">
+    update custom 
+    <set>
+      <if test="licenseplates != null">
+        licensePlates = #{licenseplates,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null">
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="agencycode != null">
+        agencyCode = #{agencycode,jdbcType=VARCHAR},
+      </if>
+      <if test="phonenum != null">
+        phoneNum = #{phonenum,jdbcType=VARCHAR},
+      </if>
+      <if test="carowner != null">
+        carOwner = #{carowner,jdbcType=VARCHAR},
+      </if>
+      <if test="insurer != null">
+        insurer = #{insurer,jdbcType=VARCHAR},
+      </if>
+      <if test="insured != null">
+        insured = #{insured,jdbcType=VARCHAR},
+      </if>
+      <if test="carmodel != null">
+        carModel = #{carmodel,jdbcType=VARCHAR},
+      </if>
+      <if test="carframecode != null">
+        carFrameCode = #{carframecode,jdbcType=VARCHAR},
+      </if>
+      <if test="enginecode != null">
+        engineCode = #{enginecode,jdbcType=VARCHAR},
+      </if>
+      <if test="firsttime != null">
+        firstTime = #{firsttime,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null">
+        startTime = #{starttime,jdbcType=VARCHAR},
+      </if>
+      <if test="endtime != null">
+        endTime = #{endtime,jdbcType=VARCHAR},
+      </if>
+      <if test="insurance != null">
+        insurance = #{insurance,jdbcType=VARCHAR},
+      </if>
+      <if test="insurancecode != null">
+        insuranceCode = #{insurancecode,jdbcType=VARCHAR},
+      </if>
+      <if test="cardamage != null">
+        carDamage = #{cardamage,jdbcType=VARCHAR},
+      </if>
+      <if test="robbery != null">
+        robbery = #{robbery,jdbcType=VARCHAR},
+      </if>
+      <if test="three20 != null">
+        three20 = #{three20,jdbcType=VARCHAR},
+      </if>
+      <if test="three50 != null">
+        three50 = #{three50,jdbcType=VARCHAR},
+      </if>
+      <if test="three100 != null">
+        three100 = #{three100,jdbcType=VARCHAR},
+      </if>
+      <if test="three150 != null">
+        three150 = #{three150,jdbcType=VARCHAR},
+      </if>
+      <if test="driver != null">
+        driver = #{driver,jdbcType=VARCHAR},
+      </if>
+      <if test="passenger != null">
+        passenger = #{passenger,jdbcType=VARCHAR},
+      </if>
+      <if test="foreignglass != null">
+        foreignGlass = #{foreignglass,jdbcType=VARCHAR},
+      </if>
+      <if test="domesticglass != null">
+        domesticGlass = #{domesticglass,jdbcType=VARCHAR},
+      </if>
+      <if test="nick2 != null">
+        nick2 = #{nick2,jdbcType=VARCHAR},
+      </if>
+      <if test="nick5 != null">
+        nick5 = #{nick5,jdbcType=VARCHAR},
+      </if>
+      <if test="nick10 != null">
+        nick10 = #{nick10,jdbcType=VARCHAR},
+      </if>
+      <if test="nick15 != null">
+        nick15 = #{nick15,jdbcType=VARCHAR},
+      </if>
+      <if test="autoignition != null">
+        autoIgnition = #{autoignition,jdbcType=VARCHAR},
+      </if>
+      <if test="wading != null">
+        wading = #{wading,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where customid = #{customid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.custom.customManageSystem.model.Custom">
+    update custom 
+    set licensePlates = #{licenseplates,jdbcType=VARCHAR},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      agencyCode = #{agencycode,jdbcType=VARCHAR},
+      phoneNum = #{phonenum,jdbcType=VARCHAR},
+      carOwner = #{carowner,jdbcType=VARCHAR},
+      insurer = #{insurer,jdbcType=VARCHAR},
+      insured = #{insured,jdbcType=VARCHAR},
+      carModel = #{carmodel,jdbcType=VARCHAR},
+      carFrameCode = #{carframecode,jdbcType=VARCHAR},
+      engineCode = #{enginecode,jdbcType=VARCHAR},
+      firstTime = #{firsttime,jdbcType=VARCHAR},
+      startTime = #{starttime,jdbcType=VARCHAR},
+      endTime = #{endtime,jdbcType=VARCHAR},
+      insurance = #{insurance,jdbcType=VARCHAR},
+      insuranceCode = #{insurancecode,jdbcType=VARCHAR},
+      carDamage = #{cardamage,jdbcType=VARCHAR},
+      robbery = #{robbery,jdbcType=VARCHAR},
+      three20 = #{three20,jdbcType=VARCHAR},
+      three50 = #{three50,jdbcType=VARCHAR},
+      three100 = #{three100,jdbcType=VARCHAR},
+      three150 = #{three150,jdbcType=VARCHAR},
+      driver = #{driver,jdbcType=VARCHAR},
+      passenger = #{passenger,jdbcType=VARCHAR},
+      foreignGlass = #{foreignglass,jdbcType=VARCHAR},
+      domesticGlass = #{domesticglass,jdbcType=VARCHAR},
+      nick2 = #{nick2,jdbcType=VARCHAR},
+      nick5 = #{nick5,jdbcType=VARCHAR},
+      nick10 = #{nick10,jdbcType=VARCHAR},
+      nick15 = #{nick15,jdbcType=VARCHAR},
+      autoIgnition = #{autoignition,jdbcType=VARCHAR},
+      wading = #{wading,jdbcType=VARCHAR}
+    where customid = #{customid,jdbcType=INTEGER}
+  </update>
+</mapper>
