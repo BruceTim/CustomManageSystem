@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.alibaba.fastjson.JSON;
+import com.custom.customManageSystem.entity.Page;
 import com.custom.customManageSystem.model.User;
 import com.custom.customManageSystem.service.IUserService;
 import com.custom.customManageSystem.util.EncodeUtils;
@@ -30,7 +31,7 @@ public class UserController {
 	private IUserService userService;
 	
 	@RequestMapping(value="/showUser")
-	public String showUsers(HttpSession session, ModelMap model){
+	public String showUsers(@ModelAttribute("page") Page page, HttpSession session, ModelMap model){
 		User loginUser = (User) session.getAttribute("loginuser");
 		if(loginUser == null){
 			return "redirect:../login";
@@ -38,8 +39,12 @@ public class UserController {
 		if(loginUser.getUid() != 1){
 			return "redirect:../405";
 		}
-		List<User> users = this.userService.getUsers();
+		int totalCount = userService.selectAllCount();
+		page.setTotalCount(totalCount);
+		page.count();
+		List<User> users = this.userService.getUsersByPage(page);
 		model.put("users", users);
+		model.put("page", page);
 		return "showUser";
 	}
 	

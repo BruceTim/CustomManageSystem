@@ -2,6 +2,9 @@ package com.custom.customManageSystem.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
+import com.custom.customManageSystem.entity.Page;
 import com.custom.customManageSystem.model.User;
 
 public interface IUserDao {
@@ -21,7 +24,9 @@ public interface IUserDao {
 
 	User selectByName(String uname);
 
-	List<User> selectAll();
+	int selectAllCount();
+	
+	List<User> selectAllByPage(@Param("page") Page page);
 	
 	int deleteMoreByPrimaryKey(Integer[] uids);
 }

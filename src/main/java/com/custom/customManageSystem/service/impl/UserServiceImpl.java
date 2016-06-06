@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.custom.customManageSystem.dao.IUserDao;
+import com.custom.customManageSystem.entity.Page;
 import com.custom.customManageSystem.model.User;
 import com.custom.customManageSystem.service.IUserService;
 
@@ -15,12 +16,10 @@ public class UserServiceImpl implements IUserService {
 	@Resource
 	private IUserDao userDao;
 	public User getUserById(int userId) {
-		// TODO Auto-generated method stub
 		return this.userDao.selectByPrimaryKey(userId);
 	}
 	@Override
 	public User login(User user) {
-		// TODO Auto-generated method stub
 		return this.userDao.login(user);
 	}
 	
@@ -37,8 +36,8 @@ public class UserServiceImpl implements IUserService {
 		return this.userDao.selectByName(uname) ;
 	}
 	@Override
-	public List<User> getUsers() {
-		return this.userDao.selectAll();
+	public List<User> getUsersByPage(Page page) {
+		return this.userDao.selectAllByPage(page);
 	}
 	@Override
 	public boolean updateUser(User user) {
@@ -47,6 +46,10 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public boolean delUsers(Integer[] uids) {
 		return this.userDao.deleteMoreByPrimaryKey(uids) > 0;
+	}
+	@Override
+	public int selectAllCount() {
+		return this.userDao.selectAllCount();
 	}
 
 }

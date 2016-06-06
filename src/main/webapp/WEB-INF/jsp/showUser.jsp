@@ -14,6 +14,8 @@
 	<script src="${pageContext.request.contextPath}/js/respond.min.js"></script>
 	<script src="${pageContext.request.contextPath}/js/html5.js"></script>
   <![endif]-->
+<link href="${pageContext.request.contextPath}/css/page.css"
+	rel="stylesheet">
 <script src="${pageContext.request.contextPath}/js/jquery-1.10.2.js"></script>
 <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 <style>
@@ -75,6 +77,8 @@
 					method="post">
 					<fieldset align="center">
 						<legend>管理按钮</legend>
+						<input type="hidden" id="currentPage" name="currentPage" value="${page.currentPage }"/>
+						<input type="hidden" id="basePath" value="${pageContext.request.contextPath}"/>
 						<button class="btn btn-default"
 							onclick="addUser('${pageContext.request.contextPath}/user/addUser');">新增用户</button>
 						<button class="btn btn-default"
@@ -121,6 +125,20 @@
 							</tbody>
 						</table>
 					</fieldset>
+					<div class='page fix'>
+						共 <b>${page.totalCount}</b> 条
+						<c:if test="${page.currentPage != 1}">
+							<a href="javascript:changeCurrentPage('1')" class='first'>首页</a>
+							<a href="javascript:changeCurrentPage('${page.currentPage-1}')" class='pre'>上一页</a>
+						</c:if>
+						当前第<span>${page.currentPage}/${page.totalPage}</span>页
+						<c:if test="${page.currentPage != page.totalPage}">
+							<a href="javascript:changeCurrentPage('${page.currentPage+1}')" class='next'>下一页</a>
+							<a href="javascript:changeCurrentPage('${page.totalPage}')" class='last'>末页</a>
+						</c:if>
+						跳至&nbsp;<input id="currentPageText" type='text' value='${page.currentPage}' class='allInput w28' />&nbsp;页&nbsp;
+						<a href="javascript:changeCurrentPage($('#currentPageText').val())" class='go'>GO</a>
+					</div>
 				</form>
 				<form id="form_user_update" class="form-horizontal col-md-4" 
 					action="${pageContext.request.contextPath}/user/updateUser.do"
@@ -242,6 +260,12 @@
 			});
 		});
 
+		function changeCurrentPage(currentPage){
+			var basePath = $("#basePath").val();
+			$("#form_user").attr("action",basePath + "/user/showUser");
+			$("#form_user").submit();
+		}
+		
 		function addUser(action) {
 			var form_user = $("#form_user")[0];
 			form_user.action = action;
