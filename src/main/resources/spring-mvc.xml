@@ -24,7 +24,7 @@
         	</bean>  
     	</mvc:message-converters>
 	</mvc:annotation-driven> 
-	<mvc:resources location="/WEB-INF/resources/images/" mapping="/image/**"/> 
+	<mvc:resources location="/WEB-INF/resources/images/" mapping="/images/**"/> 
 	<mvc:resources location="/WEB-INF/resources/css/" mapping="/css/**"/> 
 	<mvc:resources location="/WEB-INF/resources/js/" mapping="/js/**"/>
 	<!--避免IE执行AJAX时，返回JSON出现下载文件 -->

@@ -207,9 +207,12 @@ public class CustomController {
 				custom.setThree100("");
 				custom.setThree150("√");
 			}
-			if("foreign".equals(glass)){
-				custom.setForeignglass("√");
+			if("none".equals(glass)){
+				custom.setForeignglass("");
 				custom.setDomesticglass("");
+			}else if("foreign".equals(glass)){
+					custom.setForeignglass("√");
+					custom.setDomesticglass("");
 			} else if("domestic".equals(glass)){
 				custom.setForeignglass("");
 				custom.setDomesticglass("√");
@@ -302,31 +305,31 @@ public class CustomController {
 //		}
 //	}
 	
-	@RequestMapping(value="/searchOut.do", method=RequestMethod.POST)
-	public String searchCustomOut(HttpSession session, HttpServletResponse response, @RequestParam("time1") String time1, @RequestParam("time2") String time2, ModelMap model){
-		response.setContentType("text/html;charset=utf-8");
-		PrintWriter out = null;
-		try {
-			out = response.getWriter();
-			User user = (User) session.getAttribute("loginuser");
-			if(user == null){
-				out.println("<script>alert('你还没有登录或登录已过期，请登录！');location='../login';</script>");
-				return null;
-			}
-			if(user.getRole() == 2){
-				return "redirect:405";
-			}
-			Custom custom = new Custom();
-			List<Custom> customs = customService.selectByCondition(custom, time1, time2);
-			model.addAttribute("time1", time1);
-			model.addAttribute("time2", time2);
-			model.addAttribute("customs", customs);
-			return "outCustom";
-		}catch(Exception e){
-			e.printStackTrace();
-			return "redirect:../500";
-		}
-	}
+//	@RequestMapping(value="/searchOut.do", method=RequestMethod.POST)
+//	public String searchCustomOut(HttpSession session, HttpServletResponse response, @RequestParam("time1") String time1, @RequestParam("time2") String time2, ModelMap model){
+//		response.setContentType("text/html;charset=utf-8");
+//		PrintWriter out = null;
+//		try {
+//			out = response.getWriter();
+//			User user = (User) session.getAttribute("loginuser");
+//			if(user == null){
+//				out.println("<script>alert('你还没有登录或登录已过期，请登录！');location='../login';</script>");
+//				return null;
+//			}
+//			if(user.getRole() == 2){
+//				return "redirect:405";
+//			}
+//			Custom custom = new Custom();
+//			List<Custom> customs = customService.selectByCondition(custom, time1, time2);
+//			model.addAttribute("time1", time1);
+//			model.addAttribute("time2", time2);
+//			model.addAttribute("customs", customs);
+//			return "outCustom";
+//		}catch(Exception e){
+//			e.printStackTrace();
+//			return "redirect:../500";
+//		}
+//	}
 	
 	@RequestMapping(value="/delCustom.do")
 	public String delCustom(HttpServletRequest request, HttpSession session, HttpServletResponse response, @RequestParam("customids") Integer[] customids, ModelMap model, RedirectAttributes attrs){
@@ -380,7 +383,10 @@ public class CustomController {
 	}
 	
 	@RequestMapping(value="/outCustom")
-	public String outPut(HttpSession session, HttpServletResponse response, ModelMap model){
+	public String outPut(@ModelAttribute Page page, HttpSession session, HttpServletResponse response, ModelMap model,
+			@RequestParam(value="year",defaultValue="") String year,
+			@RequestParam(value="month",defaultValue="") String month
+			){
 		response.setContentType("text/html;charset=utf-8");
 		PrintWriter out = null;
 		try {
@@ -391,8 +397,31 @@ public class CustomController {
 				return null;
 			}
 			if(user.getRole() == 2){
-				return "redirect:405";
+				return "redirect:../405";
 			}
+			
+			if("".equals(year) && "".equals(month)){
+				year = (String) session.getAttribute("year");
+				if(year == null){
+					year = "";
+				}
+				month = (String) session.getAttribute("month");
+				if(month == null){
+					month = "";
+				}
+				session.removeAttribute("year");
+				session.removeAttribute("month");
+			}
+			
+			int totalCount = customService.selectCountByDate(year, month);
+			page.setTotalCount(totalCount);
+			page.count();
+			List<Custom> customs = customService.selectByDatePage(page, year, month);
+			model.addAttribute("customs", customs);
+			model.addAttribute("page", page);
+			model.addAttribute("year",year);
+			model.addAttribute("month", month);
+			
 			return "outCustom";
 		} catch (Exception e) {
 			return "redirect:../500";
@@ -400,7 +429,10 @@ public class CustomController {
 	}
 	
 	@RequestMapping(value="/output.do", method=RequestMethod.POST)
-	public String outPut(HttpSession session, HttpServletResponse response, @RequestParam("customids") Integer[] customids, ModelMap model){
+	public String outPut(HttpSession session, HttpServletResponse response, @RequestParam("customids") Integer[] customids, ModelMap model,
+			@RequestParam(value="year",defaultValue="") String year,
+			@RequestParam(value="month",defaultValue="") String month){
+		
 		response.setContentType("text/html;charset=utf-8");
 		PrintWriter out = null;
 		try {
@@ -411,11 +443,43 @@ public class CustomController {
 				return null;
 			}
 			if(user.getRole() == 2){
-				return "redirect:405";
+				return "redirect:../405";
 			}
 			List<Custom> customs = customService.outPut(customids);
 			String path = session.getServletContext().getRealPath("file/");
 			String filename = ExcelUtils.writeExcel(customs, path);
+			session.setAttribute("year", year);
+			session.setAttribute("month", month);
+			
+			return "redirect:../file/download/" + filename;
+		} catch (Exception e) {
+			return "redirect:../500";
+		}
+	}
+	
+	@RequestMapping(value="/outputAll.do", method=RequestMethod.POST)
+	public String outPutAll(HttpSession session, HttpServletResponse response, ModelMap model,
+			@RequestParam(value="year",defaultValue="") String year,
+			@RequestParam(value="month",defaultValue="") String month){
+		
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = null;
+		try {
+			out = response.getWriter();
+			User user = (User) session.getAttribute("loginuser");
+			if(user == null){
+				out.println("<script>alert('你还没有登录或登录已过期，请登录！');location='../login';</script>");
+				return null;
+			}
+			if(user.getRole() == 2){
+				return "redirect:../405";
+			}
+			List<Custom> customs = customService.selectByDate(year, month);
+			String path = session.getServletContext().getRealPath("file/");
+			String filename = ExcelUtils.writeExcel(customs, path);
+			session.setAttribute("year", year);
+			session.setAttribute("month", month);
+			
 			return "redirect:../file/download/" + filename;
 		} catch (Exception e) {
 			return "redirect:../500";
@@ -486,9 +550,12 @@ public class CustomController {
 				custom.setThree100("");
 				custom.setThree150("√");
 			}
-			if("foreign".equals(glass)){
-				custom.setForeignglass("√");
+			if("none".equals(glass)){
+				custom.setForeignglass("");
 				custom.setDomesticglass("");
+			}else if("foreign".equals(glass)){
+					custom.setForeignglass("√");
+					custom.setDomesticglass("");
 			} else if("domestic".equals(glass)){
 				custom.setForeignglass("");
 				custom.setDomesticglass("√");

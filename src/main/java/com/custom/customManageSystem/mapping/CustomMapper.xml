@@ -13,9 +13,9 @@
     <result column="carModel" jdbcType="VARCHAR" property="carmodel" />
     <result column="carFrameCode" jdbcType="VARCHAR" property="carframecode" />
     <result column="engineCode" jdbcType="VARCHAR" property="enginecode" />
-    <result column="firstTime" jdbcType="VARCHAR" property="firsttime" />
-    <result column="startTime" jdbcType="VARCHAR" property="starttime" />
-    <result column="endTime" jdbcType="VARCHAR" property="endtime" />
+    <result column="firstTime" jdbcType="DATE" property="firsttime" />
+    <result column="startTime" jdbcType="DATE" property="starttime" />
+    <result column="endTime" jdbcType="DATE" property="endtime" />
     <result column="insurance" jdbcType="VARCHAR" property="insurance" />
     <result column="insuranceCode" jdbcType="VARCHAR" property="insurancecode" />
     <result column="carDamage" jdbcType="VARCHAR" property="cardamage" />
@@ -72,6 +72,94 @@
     </if>
   </select>
   
+  <select id="selectCountByDate" resultType="java.lang.Integer">
+    select count(*) 
+    from custom 
+    where 1 = 1 
+    <choose>
+    	<when test="year != null and '' != year">
+    		<choose>
+    			<when test="month != null and '' != month">
+    				AND year(endTime) = #{year,jdbcType=VARCHAR} AND month(endTime) = #{month,jdbcType=VARCHAR} 
+    			</when>
+    			<otherwise>
+    				AND year(endTime) = #{year,jdbcType=VARCHAR} 
+    			</otherwise>
+    		</choose>
+    	</when>
+    	<otherwise>
+    		<choose>
+    			<when test="month != null and '' != month">
+    				AND month(endTime) = #{month,jdbcType=VARCHAR} 
+    			</when>
+    			<otherwise>
+    				AND 1 = 1  
+    			</otherwise>
+    		</choose>
+    	</otherwise>
+    </choose>
+  </select>
+  
+  <select id="selectByDate" resultMap="Custom">
+    select 
+    <include refid="Base_Column_List" />
+    from custom 
+    where 1 = 1 
+    <choose>
+    	<when test="year != null and '' != year">
+    		<choose>
+    			<when test="month != null and '' != month">
+    				AND year(endTime) = #{year,jdbcType=VARCHAR} AND month(endTime) = #{month,jdbcType=VARCHAR} 
+    			</when>
+    			<otherwise>
+    				AND year(endTime) = #{year,jdbcType=VARCHAR} 
+    			</otherwise>
+    		</choose>
+    	</when>
+    	<otherwise>
+    		<choose>
+    			<when test="month != null and '' != month">
+    				AND month(endTime) = #{month,jdbcType=VARCHAR} 
+    			</when>
+    			<otherwise>
+    				AND 1 = 1  
+    			</otherwise>
+    		</choose>
+    	</otherwise>
+    </choose>
+    order by endTime 
+  </select>
+  
+  <select id="selectByDatePage" resultMap="Custom">
+    select 
+    <include refid="Base_Column_List" />
+    from custom 
+    where 1 = 1 
+    <choose>
+    	<when test="year != null and '' != year">
+    		<choose>
+    			<when test="month != null and '' != month">
+    				AND year(endTime) = #{year,jdbcType=VARCHAR} AND month(endTime) = #{month,jdbcType=VARCHAR} 
+    			</when>
+    			<otherwise>
+    				AND year(endTime) = #{year,jdbcType=VARCHAR} 
+    			</otherwise>
+    		</choose>
+    	</when>
+    	<otherwise>
+    		<choose>
+    			<when test="month != null and '' != month">
+    				AND month(endTime) = #{month,jdbcType=VARCHAR} 
+    			</when>
+    			<otherwise>
+    				AND 1 = 1  
+    			</otherwise>
+    		</choose>
+    	</otherwise>
+    </choose>
+    order by endTime limit #{page.dbIndex} , #{page.size}
+  </select>
+  
   <select id="selectCountByCondition" resultType="java.lang.Integer">
     select count(*) 
     from custom 
@@ -93,10 +181,10 @@
     -->
     <!-- 
     <if test="time1 != null">
-    	AND endTime &gt;= #{time1,jdbcType=VARCHAR}
+    	AND endTime &gt;= #{time1,jdbcType=DATE}
     </if>
     <if test="time2 != null">
-    	AND endTime &lt;= #{time2,jdbcType=VARCHAR}
+    	AND endTime &lt;= #{time2,jdbcType=DATE}
     </if>
     -->
   </select>
@@ -120,7 +208,7 @@
     	AND endTime &lt;= #{time2,jdbcType=VARCHAR}
     </if>
     -->
-    order by customid limit #{page.dbIndex} , #{page.size}
+    order by customid desc limit #{page.dbIndex} , #{page.size}
   </select>
   
   <select id="selectByCondition" resultMap="Custom">
@@ -172,8 +260,8 @@
     values (#{customid,jdbcType=INTEGER}, #{licenseplates,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR}, 
       #{agencycode,jdbcType=VARCHAR}, #{phonenum,jdbcType=VARCHAR}, #{carowner,jdbcType=VARCHAR}, 
       #{insurer,jdbcType=VARCHAR}, #{insured,jdbcType=VARCHAR}, #{carmodel,jdbcType=VARCHAR}, 
-      #{carframecode,jdbcType=VARCHAR}, #{enginecode,jdbcType=VARCHAR}, #{firsttime,jdbcType=VARCHAR}, 
-      #{starttime,jdbcType=VARCHAR}, #{endtime,jdbcType=VARCHAR}, #{insurance,jdbcType=VARCHAR}, 
+      #{carframecode,jdbcType=VARCHAR}, #{enginecode,jdbcType=VARCHAR}, #{firsttime,jdbcType=DATE}, 
+      #{starttime,jdbcType=DATE}, #{endtime,jdbcType=DATE}, #{insurance,jdbcType=VARCHAR}, 
       #{insurancecode,jdbcType=VARCHAR}, #{cardamage,jdbcType=VARCHAR}, #{robbery,jdbcType=VARCHAR}, 
       #{three20,jdbcType=VARCHAR}, #{three30,jdbcType=VARCHAR}, #{three50,jdbcType=VARCHAR},
       #{three100,jdbcType=VARCHAR}, 
@@ -320,13 +408,13 @@
         #{enginecode,jdbcType=VARCHAR},
       </if>
       <if test="firsttime != null">
-        #{firsttime,jdbcType=VARCHAR},
+        #{firsttime,jdbcType=DATE},
       </if>
       <if test="starttime != null">
-        #{starttime,jdbcType=VARCHAR},
+        #{starttime,jdbcType=DATE},
       </if>
       <if test="endtime != null">
-        #{endtime,jdbcType=VARCHAR},
+        #{endtime,jdbcType=DATE},
       </if>
       <if test="insurance != null">
         #{insurance,jdbcType=VARCHAR},
@@ -421,13 +509,13 @@
         engineCode = #{enginecode,jdbcType=VARCHAR},
       </if>
       <if test="firsttime != null">
-        firstTime = #{firsttime,jdbcType=VARCHAR},
+        firstTime = #{firsttime,jdbcType=DATE},
       </if>
       <if test="starttime != null">
-        startTime = #{starttime,jdbcType=VARCHAR},
+        startTime = #{starttime,jdbcType=DATE},
       </if>
       <if test="endtime != null">
-        endTime = #{endtime,jdbcType=VARCHAR},
+        endTime = #{endtime,jdbcType=DATE},
       </if>
       <if test="insurance != null">
         insurance = #{insurance,jdbcType=VARCHAR},
@@ -498,9 +586,9 @@
       carModel = #{carmodel,jdbcType=VARCHAR},
       carFrameCode = #{carframecode,jdbcType=VARCHAR},
       engineCode = #{enginecode,jdbcType=VARCHAR},
-      firstTime = #{firsttime,jdbcType=VARCHAR},
-      startTime = #{starttime,jdbcType=VARCHAR},
-      endTime = #{endtime,jdbcType=VARCHAR},
+      firstTime = #{firsttime,jdbcType=DATE},
+      startTime = #{starttime,jdbcType=DATE},
+      endTime = #{endtime,jdbcType=DATE},
       insurance = #{insurance,jdbcType=VARCHAR},
       insuranceCode = #{insurancecode,jdbcType=VARCHAR},
       carDamage = #{cardamage,jdbcType=VARCHAR},

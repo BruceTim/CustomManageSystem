@@ -26,6 +26,12 @@ public interface ICustomDao {
     
     List<Custom> selectByConditionPage(@Param("custom") Custom custom, @Param("page") Page page, @Param("time1") String time1, @Param("time2") String time2);
     
+    int selectCountByDate(@Param("year") String year, @Param("month") String month);
+    
+    List<Custom> selectByDate(@Param("year") String year, @Param("month") String month);
+    
+    List<Custom> selectByDatePage(@Param("page") Page page, @Param("year") String year, @Param("month") String month);
+    
     List<Custom> selectMoreById(Integer[] customids);
     
     int updateByPrimaryKeySelective(Custom custom);

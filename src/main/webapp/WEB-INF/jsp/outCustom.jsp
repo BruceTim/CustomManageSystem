@@ -15,6 +15,8 @@
 	<script src="${pageContext.request.contextPath}/js/respond.min.js"></script>
 	<script src="${pageContext.request.contextPath}/js/html5.js"></script>
   <![endif]-->
+<link href="${pageContext.request.contextPath}/css/page.css"
+	rel="stylesheet">
 <script src="${pageContext.request.contextPath}/js/jquery-1.10.2.js"></script>
 <script src="${pageContext.request.contextPath }/js/mydate.js"></script>
 <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
@@ -74,7 +76,7 @@
 						<a href="${pageContext.request.contextPath}/user/addUser">用户信息添加</a>
 					</p>
 					<p>
-						<a href="${pageContext.request.contextPath}/loginRecord/showRecord">用户登录记录</a>
+						<a href="${pageContext.request.contextPath}/record/showRecord">用户登录记录</a>
 					</p>
 				</c:if>
 				<p>
@@ -84,32 +86,49 @@
 			</div>
 			<div class="col-sm-11">
 				<div class="col-sm-8" >
-					<form id="form_custom_search" role="form" 
-						action="${pageContext.request.contextPath}/custom/searchOut.do" onsubmit="return checkSearch();" 
+					<form id="form_custom" role="form" 
 						method="post">
 						<fieldset align="center">
-							<legend>终保时间范围搜索</legend>
-						      	<label>范围头</label>
-						      	<input type="text" id="time1" name="time1" 
-						      		value="<fmt:formatDate value='${time1 }' pattern='yyyy/MM/dd' />"  
-						         	onfocus="MyCalendar.SetDate(this)" placeholder="2016/01/01" required />
-						   		<label style="margin-left: 20px;">范围尾</label>
-						      	<input type="text" id="time2" name="time2" 
-									value="<fmt:formatDate value='${time2 }' pattern='yyyy/MM/dd' />"  
-						      		onfocus="MyCalendar.SetDate(this)" placeholder="2016/02/31" required />
-						   		<button class="btn btn-default">搜索</button>
+							<legend>终保时间搜索</legend>
+						      	<label>年份</label>
+						      	<input type="hidden" id="currentPage" name="currentPage" value="${page.currentPage }"/>
+						      	<input type="hidden" id="basePath" value="${pageContext.request.contextPath }"/>
+						      	<input type="hidden" id="hiddenYear" value="${year }"/>
+						      	<input type="hidden" id="hiddenMonth" value="${month }"/>
+						      	<select id="year" name="year" onkeydown="Select.del(this,event)" onkeypress="Select.write(this,event)">
+									<option value="">请选择年份</option>
+									<option value="2016">2016年</option>
+									<option value="2015">2015年</option>
+									<option value="2014">2014年</option>
+									<option value="2013">2013年</option>
+									<option value="2012">2012年</option>
+									<option value="2011">2011年</option>
+									<option value="2010">2010年</option>
+								</select>
+						   		<label style="margin-left: 20px;">月份</label>
+						   		<select id="month" name="month" onkeydown="Select.del(this,event)" onkeypress="Select.write(this,event)">
+									<option value="">请选择月份</option>
+									<option value="1">1月</option>
+									<option value="2">2月</option>
+									<option value="3">3月</option>
+									<option value="4">4月</option>
+									<option value="5">5月</option>
+									<option value="6">6月</option>
+									<option value="7">7月</option>
+									<option value="8">8月</option>
+									<option value="9">9月</option>
+									<option value="10">10月</option>
+									<option value="11">11月</option>
+									<option value="12">12月</option>
+								</select>
+						   		<button id="btn_search" class="btn btn-default" style="margin-left: 20px;">搜索</button>
+						   		<button id="btn_out" class="btn btn-default" style="margin-left: 20px;">导出选中</button>
+						   		<button id="btn_out_all" class="btn btn-default" style="margin-left: 20px;">导出全部</button>
 						</fieldset>
-					</form>
-					<form id="form_user" class="form-inline" role="form" 
-						action="${pageContext.request.contextPath}/custom/output.do" 
-						method="post" onsubmit="return checkDel();">
 						<fieldset align="center">
 							<legend>客户列表</legend>
 							<table class="table table-bordered table-condensed table-striped table-hover">
 								<thead>
-									<tr align="center">
-										<th colspan="6"><button class="btn btn-default" type="submit" >导出选中</button></th>
-									</tr>
 									<tr align="center">
 										<th><input type="checkbox" id="selectAll"/>全选</th>
 										<th>车牌号</th>
@@ -133,6 +152,20 @@
 								</tbody>
 							</table>
 						</fieldset>
+						<div class='page fix'>
+							共 <b>${page.totalCount}</b> 条
+							<c:if test="${page.currentPage != 1}">
+								<a href="javascript:changeCurrentPage('1')" class='first'>首页</a>
+								<a href="javascript:changeCurrentPage('${page.currentPage-1}')" class='pre'>上一页</a>
+							</c:if>
+							当前第<span>${page.currentPage}/${page.totalPage}</span>页
+							<c:if test="${page.currentPage != page.totalPage}">
+								<a href="javascript:changeCurrentPage('${page.currentPage+1}')" class='next'>下一页</a>
+								<a href="javascript:changeCurrentPage('${page.totalPage}')" class='last'>末页</a>
+							</c:if>
+							跳至&nbsp;<input id="currentPageText" type='text' value='${page.currentPage}' class='allInput w28' />&nbsp;页&nbsp;
+							<a href="javascript:changeCurrentPage($('#currentPageText').val())" class='go'>GO</a>
+						</div>
 					</form>
 				</div>
 				<div class="col-sm-4" >
@@ -282,14 +315,20 @@
 							<div class="form-group">
 								<label class="control-label col-sm-3">三者（万）</label>&nbsp;
 								<label>
+									<input type="radio" name="three" value="0" />0
+								</label>&nbsp;
+								<label>
 									<input type="radio" name="three" value="20" />20
-								</label>&nbsp;&nbsp;&nbsp;
+								</label>&nbsp;
+								<label>
+									<input type="radio" name="three" value="30" />30
+								</label>&nbsp;
 								<label>
 									<input type="radio" name="three" value="50" />50
-								</label>&nbsp;&nbsp;&nbsp;
+								</label>&nbsp;
 								<label>
 									<input type="radio" name="three" value="100" />100
-								</label>&nbsp;&nbsp;&nbsp;
+								</label>&nbsp;
 								<label>
 									<input type="radio" name="three" value="150" />150
 								</label>
@@ -313,23 +352,29 @@
 							<div class="form-group">
 								<label class="control-label col-sm-3">玻璃</label>
 								<label class="col-sm-3 ">
-									<input type="radio" name="glass" value="foreign" readonly="readonly"/>&nbsp;&nbsp;进口
+									<input type="radio" name="glass" value="none" readonly="readonly"/>无
+								</label>
+								<label class="col-sm-3 ">
+									<input type="radio" name="glass" value="foreign" readonly="readonly"/>进口
 								</label>
 								<label class="col-sm-3" >
-									<input type="radio" name="glass" value="domestic" readonly="readonly"/>&nbsp;&nbsp;国产
+									<input type="radio" name="glass" value="domestic" readonly="readonly"/>国产
 								</label>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-3">划痕</label>&nbsp;
 								<label>
+									<input type="radio" name="nick" value="0" />0
+								</label>&nbsp;
+								<label>
 									<input type="radio" name="nick" value="2000" />2000
-								</label>&nbsp;&nbsp;&nbsp;
+								</label>&nbsp;
 								<label>
 									<input type="radio" name="nick" value="5000" />5000
-								</label>&nbsp;&nbsp;&nbsp;
+								</label>&nbsp;
 								<label>
 									<input type="radio" name="nick" value="10000" />10000
-								</label>&nbsp;&nbsp;&nbsp;
+								</label>&nbsp;
 								<label>
 									<input type="radio" name="nick" value="15000" />15000
 								</label>
@@ -351,126 +396,6 @@
 		</div>
 	</div>
 	
-	<script type="text/javascript">
-		$(document).ready(function (){
-			$("#selectAll").click(function (){
-				var isSelectAll = $(this).prop("checked");
-				if(isSelectAll){
-					$("input[name^='customids']").prop("checked", true);
-				} else {
-					$("input[name^='customids']").prop("checked", false);
-				}
-			});
-			
-			$(".table tbody tr").click(function (){
-				var id = $(this).find("td").eq(0).find("input").val();
-				$.post("getCustom.do", {customid: id} , function (data){
-					if(data.indexOf("nologin") >= 0){
-						alert("你还没登陆或登录已过期，请登录！");
-						window.location.href = "../login";
-					} else if(data.indexOf("none") >= 0){
-						alert("该客户已不存在！");
-						window.location.href = "showCustom";
-					}
-					var json = $.parseJSON(data);
-					$("#form_custom_update #customid").val(json.customid);
-					$("#form_custom_update #licenseplates").val(json.licenseplates);
-					$("#form_custom_update #idcard").val(json.idcard);
-					$("#form_custom_update #agencycode").val(json.agencycode);
-					$("#form_custom_update #phonenum").val(json.phonenum);
-					$("#form_custom_update #carowner").val(json.carowner);
-					$("#form_custom_update #insurer").val(json.insurer);
-					$("#form_custom_update #insured").val(json.insured);
-					$("#form_custom_update #carmodel").val(json.carmodel);
-					$("#form_custom_update #carframecode").val(json.carframecode);
-					$("#form_custom_update #enginecode").val(json.enginecode);
-					$("#form_custom_update #firsttime").val(json.firsttime);
-					$("#form_custom_update #starttime").val(json.starttime);
-					$("#form_custom_update #endtime").val(json.endtime);
-					$("#form_custom_update #insurance").val(json.insurance);
-					$("#form_custom_update #insurancecode").val(json.insurancecode);
-					if(json.cardamage != ""){
-						$("#form_custom_update input[name='cardamage']:checkbox").prop("checked", true);
-					}else {
-						$("#form_custom_update input[name='cardamage']:checkbox").prop("checked", false);
-					}
-					$("#form_custom_update input[name='cardamage']:checkbox").prop("disabled", true);
-					if(json.robbery != ""){
-						$("#form_custom_update input[name='robbery']").prop("checked", true);
-					}else {
-						$("#form_custom_update input[name='robbery']").prop("checked", false);
-					}
-					$("#form_custom_update input[name='robbery']").prop("disabled", true);
-					if(json.three20 != ""){
-						$("#form_custom_update input[name='three']").eq(0).prop("checked", true);
-					}else if(json.three50 != ""){
-						$("#form_custom_update input[name='three']").eq(1).prop("checked", true);
-					}else if(json.three100 != ""){
-						$("#form_custom_update input[name='three']").eq(2).prop("checked", true);
-					}else if(json.three150 != ""){
-						$("#form_custom_update input[name='three']").eq(3).prop("checked", true);
-					}
-					$("#form_custom_update input[name='three']").prop("disabled", true);
-					$("#form_custom_update #driver").val(json.driver);
-					$("#form_custom_update #passenger").val(json.passenger);
-					if(json.foreignglass != ""){
-						$("#form_custom_update input[name='glass']").eq(0).prop("checked", true);
-					}else if(json.domesticglass != ""){
-						$("#form_custom_update input[name='glass']").eq(1).prop("checked", true);
-					}
-					$("#form_custom_update input[name='glass']").prop("disabled", true);
-					if(json.nick2 != ""){
-						$("#form_custom_update input[name='nick']").eq(0).prop("checked", true);
-					}else if(json.nick5 != ""){
-						$("#form_custom_update input[name='nick']").eq(1).prop("checked", true);
-					}else if(json.nick10 != ""){
-						$("#form_custom_update input[name='nick']").eq(2).prop("checked", true);
-					}else if(json.nick15 != ""){
-						$("#form_custom_update input[name='nick']").eq(3).prop("checked", true);
-					}
-					$("#form_custom_update input[name='nick']").prop("disabled", true);
-					if(json.autoignition != ""){
-						$("#form_custom_update input[name='autoignition']").eq(0).prop("checked", true);
-					}else {
-						$("#form_custom_update input[name='autoignition']").eq(0).prop("checked", false);
-					}
-					$("#form_custom_update input[name='autoignition']").prop("disabled", true);
-					if(json.wading != ""){
-						$("#form_custom_update input[name='wading']").eq(0).prop("checked", true);
-					}else {
-						$("#form_custom_update input[name='wading']").eq(0).prop("checked", false);
-					}
-					$("#form_custom_update input[name='wading']").prop("disabled", true);
-					$("#form_custom_update #remark").text(json.remark);
-				});
-			});
-		});
-		
-		function checkSearch(){
-			var time1 = $("#form_custom_search #time1").val();
-			var time2 = $("#form_custom_search #time2").val();
-			if($.trim(time1) == "" && $.trim(time2) == ""){
-				alert("至少输入一个搜索条件");
-				return false;
-			}
-			return true;
-		}
-		
-		function checkDel(){
-			var isSelected = false;
-			$("input[name^='customids']").each(function(i){
-				var isCheck = $(this).prop("checked");
-				if(isCheck){
-					isSelected = true;
-					return false;
-				}
-			});
-			if(!isSelected){
-				alert("至少勾选一个！");
-				return isSelected;
-			}
-			return confirm("确定要导出吗？");
-		}
-	</script>
+	<script src="${pageContext.request.contextPath }/js/outCustom.js" type="text/javascript"></script>
 </body>
 </html>

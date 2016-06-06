@@ -1,9 +1,26 @@
 $(document)
 		.ready(
 				function() {
-					/**
-					 * 全选
-					 */
+
+					var nowDate = new Date();
+					var nowYear = nowDate.getFullYear();
+					$("#year option").remove();
+					$("#year").append("<option value=''>请选择年份</option>");
+
+					for (var i = nowYear; i >= nowYear - 50; i--) {
+						$("#year")
+								.append(
+										"<option value='" + i + "'>" + i
+												+ "年</option>");
+						if (i <= 1970) {
+							break;
+						}
+					}
+					var year = $("#hiddenYear").val();
+					var month = $("#hiddenMonth").val();
+					$("#year").val(year);
+					$("#month").val(month);
+
 					$("#selectAll").click(
 							function() {
 								var isSelectAll = $(this).prop("checked");
@@ -15,61 +32,54 @@ $(document)
 											"checked", false);
 								}
 							});
-					
-					/**
-					 * 鼠标悬浮变手
-					 */
+
+					$("#btn_search").click(
+							function() {
+								var basePath = $("#basePath").val();
+								$("#form_custom").attr("action",
+										basePath + "/custom/outCustom");
+								$("#form_custom").submit();
+							});
+
+					$("#btn_out").click(
+							function() {
+								var isSelected = false;
+								$("input[name^='customids']").each(function(i) {
+									var isCheck = $(this).prop("checked");
+									if (isCheck) {
+										isSelected = true;
+										return false;
+									}
+								});
+								if (!isSelected) {
+									alert("至少勾选一个！");
+									return false;
+								}
+								var basePath = $("#basePath").val();
+								$("#form_custom").attr("action",
+										basePath + "/custom/output.do");
+								$("#form_custom").submit();
+							});
+
+					$("#btn_out_all").click(
+							function() {
+								var basePath = $("#basePath").val();
+								$("#form_custom").attr("action",
+										basePath + "/custom/outputAll.do");
+								$("#form_custom").submit();
+							});
+
 					$(".table tbody tr").mouseover(function() {
 						$(this).css("cursor", "pointer");
 					});
-					
-					/**
-					 * 搜索
-					 */
-					$("#btn_search").click(function() {
-						var carcode = $("#form_custom #carCode").val();
-						var carFrameCode = $("#form_custom #carFrameCode").val();
-						if ($.trim(carcode) == "" && $.trim(carFrameCode) == "") {
-							alert("至少输入一个搜索条件");
-							return false;
-						}else {
-							var basePath = $("#basePath").val();
-							$("#form_custom").attr("action", basePath + "custom/showCustom");
-							$("#form_custom").submit();
-						}
-					});
-					
-					/**
-					 * 删除选中
-					 */
-					$("#btn_delete").click(function() {
-						var isSelected = false;
-						$("input[name^='customids']").each(function(i) {
-							var isCheck = $(this).prop("checked");
-							if (isCheck) {
-								isSelected = true;
-								return false;
-							}
-						});
-						if (!isSelected) {
-							alert("至少勾选一个进行删除！");
-							return false;
-						}
-						if(confirm("确定要删除吗？")){
-							var basePath = $("#basePath").val();
-							$("#form_custom").attr("action", basePath + "custom/delCustom.do");
-							$("#form_custom").submit();
-						}
-					});
-					
-					/**
-					 * 单击行请求custom详细信息
-					 */
+
 					$(".table tbody tr")
 							.click(
 									function() {
-										var id = $(this).find("td").eq(0).find("input").val();
-										$.post(
+										var id = $(this).find("td").eq(0).find(
+												"input").val();
+										$
+												.post(
 														"getCustom.do",
 														{
 															customid : id
@@ -163,6 +173,11 @@ $(document)
 																				"checked",
 																				false);
 															}
+															$(
+																	"#form_custom_update input[name='cardamage']:checkbox")
+																	.prop(
+																			"disabled",
+																			true);
 															if (json.robbery != "") {
 																$(
 																		"#form_custom_update input[name='robbery']")
@@ -176,6 +191,11 @@ $(document)
 																				"checked",
 																				false);
 															}
+															$(
+																	"#form_custom_update input[name='robbery']")
+																	.prop(
+																			"disabled",
+																			true);
 															var three = false;
 															if (json.three20 != "") {
 																three = true;
@@ -227,6 +247,11 @@ $(document)
 																				true);
 															}
 															$(
+																	"#form_custom_update input[name='three']")
+																	.prop(
+																			"disabled",
+																			true);
+															$(
 																	"#form_custom_update #driver")
 																	.val(
 																			json.driver);
@@ -260,6 +285,11 @@ $(document)
 																		"checked",
 																		true);
 															}
+															$(
+																	"#form_custom_update input[name='glass']")
+																	.prop(
+																			"disabled",
+																			true);
 															var nick = false;
 															if (json.nick2 != "") {
 																nick = true;
@@ -302,6 +332,11 @@ $(document)
 																				"checked",
 																				true);
 															}
+															$(
+																	"#form_custom_update input[name='nick']")
+																	.prop(
+																			"disabled",
+																			true);
 															if (json.autoignition != "") {
 																$(
 																		"#form_custom_update input[name='autoignition']")
@@ -317,6 +352,11 @@ $(document)
 																				"checked",
 																				false);
 															}
+															$(
+																	"#form_custom_update input[name='autoignition']")
+																	.prop(
+																			"disabled",
+																			true);
 															if (json.wading != "") {
 																$(
 																		"#form_custom_update input[name='wading']")
@@ -333,237 +373,39 @@ $(document)
 																				false);
 															}
 															$(
+																	"#form_custom_update input[name='wading']")
+																	.prop(
+																			"disabled",
+																			true);
+															$(
 																	"#form_custom_update #remark")
 																	.text(
 																			json.remark);
 														});
 									});
-
 				});
 
-/**
- * 翻页
- */
-function changeCurrentPage(currentPage){
-	$("#currentPage").val(currentPage);
-	var basePath = $("#basePath").val();
-	$("#form_custom").attr("action", basePath + "custom/showCustom");
-	$("#form_custom").submit();
+var Select = {
+	del : function(obj, e) {
+		if ((e.keyCode || e.which || e.charCode) == 8) {
+			var opt = obj.options[0];
+			opt.text = opt.value = opt.value.substring(0,
+					opt.value.length > 0 ? opt.value.length - 1 : 0);
+		}
+	},
+	write : function(obj, e) {
+		if ((e.keyCode || e.which || e.charCode) == 8)
+			return;
+		var opt = obj.options[0];
+		opt.selected = "selected";
+		opt.text = opt.value += String.fromCharCode(e.charCode || e.which
+				|| e.keyCode);
+	}
 }
 
-/**
- * 编辑custom
- * @param action 访问地址
- * @returns {Boolean}
- */
-function updateCustom(action) {
-	var cusid = $("#form_custom_update #customid").val();
-	var licen = $("#form_custom_update #licenseplates").val();
-	var idCard = $("#form_custom_update #idcard").val();
-	var agency = $("#form_custom_update #agencycode").val();
-	var phone = $("#form_custom_update #phonenum").val();
-	var carOwner = $("#form_custom_update #carowner").val();
-	var iner = $("#form_custom_update #insurer").val();
-	var ined = $("#form_custom_update #insured").val();
-	var carModel = $("#form_custom_update #carmodel").val();
-	var frame = $("#form_custom_update #carframecode").val();
-	var engine = $("#form_custom_update #enginecode").val();
-	var first = $("#form_custom_update #firsttime").val();
-	var start = $("#form_custom_update #starttime").val();
-	var end = $("#form_custom_update #endtime").val();
-	var ince = $("#form_custom_update #insurance").val();
-	var incode = $("#form_custom_update #insurancecode").val();
-	var damage = $("#form_custom_update input[name='cardamage']:checked").val();
-	var rob = $("#form_custom_update input[name='robbery']:checked").val();
-	var threee = $("#form_custom_update input[name='three']:checked").val();
-	var dr = $("#form_custom_update #driver").val();
-	var pass = $("#form_custom_update #passenger").val();
-	var gla = $("#form_custom_update input[name='glass']:checked").val();
-	var ni = $("#form_custom_update input[name='nick']:checked").val();
-	var auto = $("#form_custom_update input[name='autoignition']:checked")
-			.val();
-	var wad = $("#form_custom_update input[name='wading']:checked").val();
-	var mark = $("#form_custom_update #remark").text();
-	if ($.trim(licen) == "") {
-		alert("必须填入车牌号！");
-		$("#form_custom_update #licenseplates").focus();
-		return false;
-	}
-	if ($.trim(idcard) == "" && $.trim(agencycode) == "") {
-		alert("身份证号和机构代码至少填一个！");
-		$("#form_custom_update #idcard").focus();
-		return false;
-	}
-	if ($.trim(phone) == "") {
-		alert("必须填入联系电话！");
-		$("#form_custom_update #phonenum").focus();
-		return false;
-	}
-	if ($.trim(frame) == "") {
-		alert("必须填入车架号！");
-		$("#form_custom_update #carframecode").focus();
-		return false;
-	}
-	if ($.trim(start) == "") {
-		alert("必须填入始保时间！");
-		$("#form_custom_update #starttime").focus();
-		return false;
-	}
-	if ($.trim(end) == "") {
-		alert("必须填入终保时间！");
-		$("#form_custom_update #endtime").focus();
-		return false;
-	}
-	if ($.trim(incode) == "") {
-		alert("必须填入保单号！");
-		$("#form_custom_update #insurancecode").focus();
-		return false;
-	}
-	if (action.indexOf("updateCustom") >= 0) {
-		$.post(action, {
-			customid : cusid,
-			licenseplates : licen,
-			idcard : idCard,
-			agencycode : agency,
-			phonenum : phone,
-			carowner : carOwner,
-			insurer : iner,
-			insured : ined,
-			carmodel : carModel,
-			carframecode : frame,
-			enginecode : engine,
-			firsttime : first,
-			starttime : start,
-			endtime : end,
-			insurance : ince,
-			insurancecode : incode,
-			cardamage : damage,
-			robbery : rob,
-			three : threee,
-			nick : ni,
-			driver : dr,
-			passenger : pass,
-			glass : gla,
-			wading : wad,
-			autoignition : auto,
-			remark : mark
-		}, function(data) {
-			if (data.indexOf("nologin") >= 0) {
-				alert("你没有登录或登录已过期，请登录!");
-				window.location.href = "../login";
-			} else if (data.indexOf("500") >= 0) {
-				window.location.href = "../500";
-				alert("修改失败，请重试！");
-			} else if (data.indexOf("true") >= 0) {
-				alert("修改完成");
-			}
-		});
-	} else if (action.indexOf("addCustom") >= 0) {
-		$.post("checkAdd", {
-			carCode : licen,
-			carFrameCode : frame
-		}, function(data) {
-			if (data.indexOf("true") >= 0) {
-				var confirmText = "";
-				var result = data.split("|");
-				if (result[1].indexOf("carCode") >= 0) {
-					confirmText = "该车牌号已存在，是否覆盖？";
-				} else if (result[1].indexOf("carFrameCode") >= 0) {
-					confirmText = "该车架号已存在，是否覆盖？";
-				}
-				if (confirm(confirmText)) {
-					$.post("updateCustom.do", {
-						customid : result[2],
-						licenseplates : licen,
-						idcard : idCard,
-						agencycode : agency,
-						phonenum : phone,
-						carowner : carOwner,
-						insurer : iner,
-						insured : ined,
-						carmodel : carModel,
-						carframecode : frame,
-						enginecode : engine,
-						firsttime : first,
-						starttime : start,
-						endtime : end,
-						insurance : ince,
-						insurancecode : incode,
-						cardamage : damage,
-						robbery : rob,
-						three : threee,
-						nick : ni,
-						driver : dr,
-						passenger : pass,
-						glass : gla,
-						wading : wad,
-						autoignition : auto,
-						remark : mark
-					}, function(data) {
-						if (data.indexOf("nologin") >= 0) {
-							alert("你没有登录或登录已过期，请登录!");
-							window.location.href = "../login";
-						} else if (data.indexOf("500") >= 0) {
-							window.location.href = "../500";
-							alert("覆盖失败，请重试！");
-						} else if (data.indexOf("true") >= 0) {
-							alert("覆盖成功");
-							window.location.href = "showCustom";
-						}
-					});
-				} else {
-					if (result[1].indexOf("carCode") >= 0) {
-						$("#form_custom_update #licenseplates").focus();
-					} else {
-						$("#form_custom_update #carframecode").focus();
-					}
-				}
-			} else if (data.indexOf("false") >= 0) {
-				$.post(action, {
-					licenseplates : licen,
-					idcard : idCard,
-					agencycode : agency,
-					phonenum : phone,
-					carowner : carOwner,
-					insurer : iner,
-					insured : ined,
-					carmodel : carModel,
-					carframecode : frame,
-					enginecode : engine,
-					firsttime : first,
-					starttime : start,
-					endtime : end,
-					insurance : ince,
-					insurancecode : incode,
-					cardamage : damage,
-					robbery : rob,
-					three : threee,
-					nick : ni,
-					driver : dr,
-					passenger : pass,
-					glass : gla,
-					wading : wad,
-					autoignition : auto,
-					remark : mark
-				}, function(data) {
-					if (data.indexOf("nologin") >= 0) {
-						alert("你没有登录或登录已过期，请登录!");
-						window.location.href = "../login";
-					} else if (data.indexOf("500") >= 0) {
-						window.location.href = "../500";
-						alert("新增失败，请重试！");
-					} else if (data.indexOf("true") >= 0) {
-						alert("新增成功");
-						window.location.href = "showCustom";
-					}
-				});
-			} else if (data.indexOf("nologin") >= 0) {
-				alert("你没有登录或登录已过期，请登录!");
-				window.location.href = "../login";
-			} else if (data.indexOf("500") >= 0) {
-				window.location.href = "../500";
-				alert("新增失败，请重试！");
-			}
-		});
-	}
+function changeCurrentPage(currentPage) {
+	$("#currentPage").val(currentPage);
+	var basePath = $("#basePath").val();
+	$("#form_custom").attr("action", basePath + "custom/outCustom");
+	$("#form_custom").submit();
 }

@@ -1,6 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
 <title>客户信息管理-列表/编辑页面</title>
@@ -78,7 +79,7 @@
 						<a href="${pageContext.request.contextPath}/user/addUser">用户信息添加</a>
 					</p>
 					<p>
-						<a href="${pageContext.request.contextPath}/loginRecord/showRecord">用户登录记录</a>
+						<a href="${pageContext.request.contextPath}/record/showRecord">用户登录记录</a>
 					</p>
 				</c:if>
 				<p>
@@ -124,7 +125,7 @@
 											<td>${custom.phonenum }</td>
 											<td>${custom.carframecode }</td>
 											<td>${custom.insurancecode }</td>
-											<td>${custom.endtime }</td>
+											<td><fmt:formatDate value="${custom.endtime }" pattern="yyyy/MM/dd"/></td>
 										</tr>
 									</c:forEach>
 								</tbody>
@@ -333,10 +334,13 @@
 							<div class="form-group">
 								<label class="col-sm-3" style="text-align: right;">玻璃</label>&nbsp;&nbsp;
 								<label class="col-sm-3 ">
-									<input type="radio" name="glass" value="foreign" />&nbsp;&nbsp;进口
+									<input type="radio" name="glass" value="none" />无
+								</label>
+								<label class="col-sm-3 ">
+									<input type="radio" name="glass" value="foreign" />进口
 								</label>
 								<label class="col-sm-3" >
-									<input type="radio" name="glass" value="domestic" checked="checked"/>&nbsp;&nbsp;国产
+									<input type="radio" name="glass" value="domestic" checked="checked"/>国产
 								</label>
 							</div>
 							<div class="form-group">
@@ -367,7 +371,7 @@
 								</div>
 							</div>
 							<div class="form-group clear">
-								<button id="btn_custom_update" type="button" class="btn btn-primary col-sm-2" 
+								<button id="btn_custom_update" type="button" class="btn btn-primary col-sm-2 col-sm-offset-2" 
 									onclick="updateCustom('${pageContext.request.contextPath}/custom/updateCustom.do');">修改</button>
 								<button id="btn_custom_add" type="button" class="btn btn-info col-sm-2" 
 									onclick="updateCustom('${pageContext.request.contextPath}/custom/addCustom.do');">新增</button>

@@ -172,6 +172,6 @@ public class FileUploadController {
         } catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return "redirect:custom/outCustom";
 	}
 }

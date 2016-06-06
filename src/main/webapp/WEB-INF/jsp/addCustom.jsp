@@ -67,7 +67,7 @@
 						<a href="${pageContext.request.contextPath}/user/addUser">用户信息添加</a>
 					</p>
 					<p>
-						<a href="${pageContext.request.contextPath}/loginRecord/showRecord">用户登录记录</a>
+						<a href="${pageContext.request.contextPath}/record/showRecord">用户登录记录</a>
 					</p>
 				</c:if>
 				<p>

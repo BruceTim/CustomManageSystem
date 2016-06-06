@@ -1,5 +1,9 @@
 package com.custom.customManageSystem.model;
 
+import java.util.Date;
+
+import com.alibaba.fastjson.annotation.JSONField;
+
 public class Custom {
     private Integer customid;
 
@@ -23,11 +27,12 @@ public class Custom {
 
     private String enginecode;
 
-    private String firsttime;
-    
-    private String starttime;
-    
-    private String endtime;
+    @JSONField(format="yyyy/MM/dd")
+    private Date firsttime;
+    @JSONField(format="yyyy/MM/dd")
+    private Date starttime;
+    @JSONField(format="yyyy/MM/dd")
+    private Date endtime;
 
     private String insurance;
 
@@ -157,27 +162,27 @@ public class Custom {
         this.enginecode = enginecode == null ? null : enginecode.trim();
     }
 
-    public String getFirsttime() {
+    public Date getFirsttime() {
 		return firsttime;
 	}
 
-	public void setFirsttime(String firsttime) {
+	public void setFirsttime(Date firsttime) {
 		this.firsttime = firsttime;
 	}
 
-	public String getStarttime() {
+	public Date getStarttime() {
 		return starttime;
 	}
 
-	public void setStarttime(String starttime) {
+	public void setStarttime(Date starttime) {
 		this.starttime = starttime;
 	}
 
-	public String getEndtime() {
+	public Date getEndtime() {
 		return endtime;
 	}
 
-	public void setEndtime(String endtime) {
+	public void setEndtime(Date endtime) {
 		this.endtime = endtime;
 	}
 

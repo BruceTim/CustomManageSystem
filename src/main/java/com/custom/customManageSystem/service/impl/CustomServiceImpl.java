@@ -77,6 +77,21 @@ public class CustomServiceImpl implements ICustomService{
 			String time1, String time2) {
 		return this.customDao.selectByConditionPage(custom, page, time1, time2);
 	}
+
+	@Override
+	public int selectCountByDate(String year, String month) {
+		return this.customDao.selectCountByDate(year, month);
+	}
+
+	@Override
+	public List<Custom> selectByDatePage(Page page, String year, String month) {
+		return this.customDao.selectByDatePage(page, year, month);
+	}
+
+	@Override
+	public List<Custom> selectByDate(String year, String month) {
+		return this.customDao.selectByDate(year, month);
+	}
 	
 	
 }

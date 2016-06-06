@@ -57,23 +57,32 @@ public class ExcelUtils {
 			    Cell firstCell = sheet.getCell(10,i);
 			    Cell startCell = sheet.getCell(11,i);
 			    Cell endCell = sheet.getCell(12,i);
-			    String firsttime = null;
-			    String starttime = null;
-			    String endtime = null;
+//			    String firsttime = null;
+//			    String starttime = null;
+//			    String endtime = null;
+			    Date firsttime = null;
+			    Date starttime = null;
+			    Date endtime = null;
 			    if(firstCell.getType() == CellType.DATE){
-			    	firsttime = formatDate2Str(((DateCell)firstCell).getDate());
+//			    	firsttime = formatDate2Str(((DateCell)firstCell).getDate());
+			    	firsttime = ((DateCell)firstCell).getDate();
 			    }else {
-			    	firsttime = firstCell.getContents();
+//			    	firsttime = firstCell.getContents();
+			    	firsttime = formatStr2Date(firstCell.getContents());
 			    }
 			    if(startCell.getType() == CellType.DATE){
-			    	starttime = formatDate2Str(((DateCell)startCell).getDate());
+//			    	starttime = formatDate2Str(((DateCell)startCell).getDate());
+			    	starttime = ((DateCell)startCell).getDate();
 			    }else {
-			    	starttime = startCell.getContents();
+//			    	starttime = startCell.getContents();
+			    	starttime = formatStr2Date(startCell.getContents());
 			    }
 			    if(endCell.getType() == CellType.DATE){
-			    	endtime = formatDate2Str(((DateCell)endCell).getDate());
+//			    	endtime = formatDate2Str(((DateCell)endCell).getDate());
+			    	endtime = ((DateCell)endCell).getDate();
 			    }else {
-			    	endtime = endCell.getContents();
+//			    	endtime = endCell.getContents();
+			    	endtime = formatStr2Date(endCell.getContents());
 			    }
 			    String insurance = sheet.getCell(13,i).getContents();
 			    String insurancecode = sheet.getCell(14,i).getContents();
@@ -216,15 +225,27 @@ public class ExcelUtils {
 				label = new Label(9,i,custom.getEnginecode());
 				label.setCellFormat(cellFormat1);
 				sheet.addCell(label);
-				DateTime dateLabel = new DateTime(10,i, formatStr2Date(custom.getFirsttime()));
-				dateLabel.setCellFormat(cellFormat2);
-				sheet.addCell(dateLabel);
-				dateLabel = new DateTime(11,i, formatStr2Date(custom.getStarttime()));
-				dateLabel.setCellFormat(cellFormat2);
-				sheet.addCell(dateLabel);
-				dateLabel = new DateTime(12,i, formatStr2Date(custom.getEndtime()));
-				dateLabel.setCellFormat(cellFormat2);
-				sheet.addCell(dateLabel);
+////				DateTime dateLabel = new DateTime(10,i, formatStr2Date(custom.getFirsttime()));
+//				DateTime dateLabel = new DateTime(10,i, custom.getFirsttime());
+//				dateLabel.setCellFormat(cellFormat2);
+//				sheet.addCell(dateLabel);
+////				dateLabel = new DateTime(11,i, formatStr2Date(custom.getStarttime()));
+//				dateLabel = new DateTime(11,i, custom.getStarttime());
+//				dateLabel.setCellFormat(cellFormat2);
+//				sheet.addCell(dateLabel);
+////				dateLabel = new DateTime(12,i, formatStr2Date(custom.getEndtime()));
+//				dateLabel = new DateTime(12,i, custom.getEndtime());
+//				dateLabel.setCellFormat(cellFormat2);
+//				sheet.addCell(dateLabel);
+				label = new Label(10,i,formatDate2Str(custom.getFirsttime()));
+				label.setCellFormat(cellFormat1);
+				sheet.addCell(label);
+				label = new Label(11,i,formatDate2Str(custom.getStarttime()));
+				label.setCellFormat(cellFormat1);
+				sheet.addCell(label);
+				label = new Label(12,i,formatDate2Str(custom.getEndtime()));
+				label.setCellFormat(cellFormat1);
+				sheet.addCell(label);
 				label = new Label(13,i,custom.getInsurance());
 				label.setCellFormat(cellFormat1);
 				sheet.addCell(label);
@@ -314,6 +335,9 @@ public class ExcelUtils {
 	}
 	
 	public static String formatDate2Str(Date date){
+		if(date == null){
+			return "";
+		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 		return sdf.format(date);
 	}
