@@ -121,7 +121,7 @@
 											</c:when>
 										</c:choose>
 										<td>${record.ipaddress }</td>
-										<td><fmt:formatDate value="${record.logintime }" pattern="yyyy-MM-dd hh:mm:ss"/></td>
+										<td><fmt:formatDate value="${record.logintime }" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 									</tr>
 								</c:forEach>
 							</tbody>
@@ -182,6 +182,13 @@
 			});
 		});
 		
+		
+		function changeCurrentPage(currentPage){
+			$("#currentPage").val(currentPage);
+			var basePath = $("#basePath").val();
+			$("#form_record").attr("action", basePath + "/record/showRecord");
+			$("#form_record").submit();
+		}
 	</script>
 </body>
 </html>
