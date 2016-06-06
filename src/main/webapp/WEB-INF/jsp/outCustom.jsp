@@ -295,7 +295,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-3" style="text-align: right;">
+								<label style="text-align: right;">
 									<input type="checkbox" id="cardamage"  
 										name="cardamage" value="√"  readonly="readonly"/>&nbsp;&nbsp;车损
 								</label>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -351,7 +351,7 @@
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-3">玻璃</label>
-								<label class="col-sm-3 ">
+								<label class="col-sm-2 ">
 									<input type="radio" name="glass" value="none" readonly="readonly"/>无
 								</label>
 								<label class="col-sm-3 ">
