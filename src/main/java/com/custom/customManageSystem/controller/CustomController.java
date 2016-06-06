@@ -603,6 +603,9 @@ public class CustomController {
 				custom.setNick10("");
 				custom.setNick15("√");
 			}
+			if(custom.getPhonenum().contains("*")){
+				custom.setPhonenum(null);
+			}
 			boolean flag = customService.updateByPrimaryKeySelective(custom) > 0 ;
 			if(flag){
 				return "true";
