@@ -14,25 +14,19 @@
     </association>
   </resultMap>
   
-  <select id="selectByUid" parameterType="java.lang.Integer" resultMap="LoginRecord">
+  <select id="selectCountByUname" resultType="java.lang.Integer">
     select 
-    lr.recordid, 
-    lr.uid as userid, 
-    lr.logintime, 
-    lr.ipaddress, 
-    u.uid, 
-    u.uname, 
-    u.upwd, 
-    u.role, 
-    u.lasttime 
+    count(*) 
     from loginrecord lr 
     left outer join user u 
     on lr.uid = u.uid 
-    where lr.uid = #{uid,jdbcType=INTEGER} 
-    order by lr.logintime desc
+    where 1 = 1 
+    <if test="uname != null and '' != uname">
+    	and u.uname LIKE CONCAT(CONCAT('%',#{uname,jdbcType=VARCHAR}),'%') 
+    </if>
   </select>
   
-  <select id="selectByUname" parameterType="java.lang.String" resultMap="LoginRecord">
+  <select id="selectByUnamePage" resultMap="LoginRecord">
     select 
     lr.recordid, 
     lr.uid as userid, 
@@ -46,25 +40,12 @@
     from loginrecord lr 
     left outer join user u 
     on lr.uid = u.uid 
-    where u.uname like CONCAT(CONCAT("%", #{uname, jdbcType=VARCHAR), "%")) 
+    where 1 = 1 
+    <if test="uname != null and '' != uname">
+    	and u.uname LIKE CONCAT(CONCAT('%', #{uname, jdbcType=VARCHAR}), '%')
+    </if>
     order by lr.logintime desc 
-  </select>
-  
-  <select id="selectAll" resultMap="LoginRecord">
-    select 
-    lr.recordid, 
-    lr.uid as userid, 
-    lr.logintime, 
-    lr.ipaddress, 
-    u.uid, 
-    u.uname, 
-    u.upwd, 
-    u.role, 
-    u.lasttime 
-    from loginrecord lr 
-    left outer join user u 
-    on lr.uid = u.uid 
-    order by lr.logintime desc
+    limit #{page.dbIndex, jdbcType=INTEGER}, #{page.size, jdbcType=INTEGER}
   </select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

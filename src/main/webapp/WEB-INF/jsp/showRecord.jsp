@@ -15,6 +15,8 @@
 	<script src="${pageContext.request.contextPath}/js/respond.min.js"></script>
 	<script src="${pageContext.request.contextPath}/js/html5.js"></script>
   <![endif]-->
+<link href="${pageContext.request.contextPath}/css/page.css"
+	rel="stylesheet">
 <script src="${pageContext.request.contextPath}/js/jquery-1.10.2.js"></script>
 <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 <style>
@@ -61,7 +63,7 @@
 						<a href="${pageContext.request.contextPath}/user/addUser">用户信息添加</a>
 					</p>
 					<p>
-						<a href="${pageContext.request.contextPath}/loginRecord/showRecord">用户登录记录</a>
+						<a href="${pageContext.request.contextPath}/record/showRecord">用户登录记录</a>
 					</p>
 				</c:if>
 				<p>
@@ -70,8 +72,8 @@
 				</aside>
 			</div>
 			<div class="col-md-10">
-				<form id="form_record_search" role="form" 
-					action="${pageContext.request.contextPath}/user/searchRecord.do" 
+				<form id="form_record" role="form" 
+					action="${pageContext.request.contextPath}/record/showRecord" 
 					method="post">
 					<fieldset align="center">
 						<legend>用戶名模糊搜索</legend>
@@ -80,17 +82,13 @@
 						         placeholder="用戶名" required value="${username }" />
 						    <input type="hidden" id="userid" name="userid" 
 						    	value="${loginuser.uid }" />
-						    <button type="button" style="margin-left: 20px;" class="btn btn-default" onclick="search('${pageContext.request.contextPath}/loginRecord/showRecord');">搜索</button>
-						    <button type="button" style="margin-left: 20px;" class="btn btn-default" onclick="search('${pageContext.request.contextPath}/loginRecord/showMyRecord');">本人登录记录</button>
+						    <input type="hidden" id="currentPage" name="currentPage" 
+						    	value="${page.currentPage }" />
+						    <input type="hidden" id="basePath" 
+						    	value="${pageContext.request.contextPath }" />
+						    <button id="btn_search" type="button" style="margin-left: 20px;" class="btn btn-default">搜索</button>
+						    <button id="btn_delete" type="button" style="margin-left: 20px;" class="btn btn-default">删除选中</button>
 					</fieldset>
-				</form>
-				
-				<form id="form_record" action="${pageContext.request.contextPath}/loginRecord/del.do" method="post" onsubmit="return checkDel()">
-					<fieldset align="center">
-						<legend>登录记录管理</legend>
-						<button type="submit" class="btn btn-default">删除记录</button>
-					</fieldset>
-					<br />
 					<fieldset align="center">
 						<legend>用户登录记录列表</legend>
 						<table class="table table-bordered table-condensed table-striped table-hover">
@@ -129,6 +127,20 @@
 							</tbody>
 						</table>
 					</fieldset>
+					<div class='page fix'>
+						共 <b>${page.totalCount}</b> 条
+						<c:if test="${page.currentPage != 1}">
+							<a href="javascript:changeCurrentPage('1')" class='first'>首页</a>
+							<a href="javascript:changeCurrentPage('${page.currentPage-1}')" class='pre'>上一页</a>
+						</c:if>
+						当前第<span>${page.currentPage}/${page.totalPage}</span>页
+						<c:if test="${page.currentPage != page.totalPage}">
+							<a href="javascript:changeCurrentPage('${page.currentPage+1}')" class='next'>下一页</a>
+							<a href="javascript:changeCurrentPage('${page.totalPage}')" class='last'>末页</a>
+						</c:if>
+						跳至&nbsp;<input id="currentPageText" type='text' value='${page.currentPage}' class='allInput w28' />&nbsp;页&nbsp;
+						<a href="javascript:changeCurrentPage($('#currentPageText').val())" class='go'>GO</a>
+					</div>
 				</form>
 			</div>
 		</div>
@@ -143,39 +155,33 @@
 					$("input[name^='recordids']").prop("checked", false);
 				}
 			});
-		});
-		
-		function search(action){
-			if(action.indexOf("showMyRecord") >= 0){
-				$("#form_record_search").attr("action",action);
-				$("#form_record_search").submit();
-			} else {
-				var username = $("#username").val();
-				if($.trim(username) == ""){
-					alert("请输入用户名！");
-					$("#username").focus();
-				} else {
-					$("#form_record_search").attr("action",action + "/" + username);
-					$("#form_record_search").submit();
-				}
-			}
-		}
-		
-		function checkDel(){
-			var isSelected = false;
-			$("input[name^='recordids']").each(function(i){
-				var isCheck = $(this).prop("checked");
-				if(isCheck){
-					isSelected = true;
+			
+			$("#btn_search").click(function(){
+				var basePath = $("#basePath").val();
+				$("#form_record").attr("action", basePath + "/record/showRecord");
+				$("#form_record").submit();
+			});
+			
+			$("#btn_delete").click(function(){
+				var isSelected = false;
+				$("input[name^='recordids']").each(function(i){
+					if($(this).prop("checked")){
+						isSelected = true;
+						return false;
+					}
+				});
+				if(!isSelected){
+					alert("至少选中一个！");
 					return false;
 				}
+				if(confirm("确定要删除吗？")){
+					var basePath = $("#basePath").val();
+					$("#form_record").attr("action", basePath + "/record/delRecord.do");
+					$("#form_record").submit();
+				}
 			});
-			if(!isSelected){
-				alert("至少勾选一个！");
-				return isSelected;
-			}
-			return confirm("确定要删除吗？");
-		}
+		});
+		
 	</script>
 </body>
 </html>

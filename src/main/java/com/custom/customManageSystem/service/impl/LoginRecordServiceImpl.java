@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.custom.customManageSystem.dao.ILoginRecordDao;
+import com.custom.customManageSystem.entity.Page;
 import com.custom.customManageSystem.model.LoginRecord;
 import com.custom.customManageSystem.service.ILoginRecordService;
 
@@ -32,18 +33,13 @@ public class LoginRecordServiceImpl implements ILoginRecordService{
 	}
 
 	@Override
-	public List<LoginRecord> selectByUid(Integer recordid) {
-		return this.loginRecordDao.selectByUid(recordid);
+	public int selectCountByUname(String uname) {
+		return this.loginRecordDao.selectCountByUname(uname);
 	}
 
 	@Override
-	public List<LoginRecord> selectByUname(String uname) {
-		return this.loginRecordDao.selectByUname(uname);
-	}
-
-	@Override
-	public List<LoginRecord> selectAll() {
-		return this.loginRecordDao.selectAll();
+	public List<LoginRecord> selectByUnamePage(Page page, String uname) {
+		return this.loginRecordDao.selectByUnamePage(page, uname);
 	}
 
 }

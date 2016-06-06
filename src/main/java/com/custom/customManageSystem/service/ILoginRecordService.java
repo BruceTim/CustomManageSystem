@@ -2,6 +2,7 @@ package com.custom.customManageSystem.service;
 
 import java.util.List;
 
+import com.custom.customManageSystem.entity.Page;
 import com.custom.customManageSystem.model.LoginRecord;
 
 public interface ILoginRecordService {
@@ -12,9 +13,8 @@ public interface ILoginRecordService {
 
     int insert(LoginRecord record);
 
-    List<LoginRecord> selectByUid(Integer recordid);
+    int selectCountByUname(String uname);
     
-    List<LoginRecord> selectByUname(String uname);
-
-    List<LoginRecord> selectAll();
+    List<LoginRecord> selectByUnamePage(Page page, String uname);
+    
 }
