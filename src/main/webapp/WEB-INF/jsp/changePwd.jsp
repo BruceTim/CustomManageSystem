@@ -134,7 +134,6 @@
 				}
 				
 				$.post("changePwd.do", {userid: uid, username: uname, oldpwd: oldPwd, newpwd: newPwd}, function (data) {
-					alert(data);
 					if(data.indexOf("true") >= 0){
 						alert("修改密码成功，请重新登录！");
 						window.location.href = "../login";
