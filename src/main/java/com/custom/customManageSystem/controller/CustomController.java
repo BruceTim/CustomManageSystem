@@ -150,7 +150,24 @@ public class CustomController {
 			if(user == null){
 				return "nologin";
 			}
-			
+			String firstTime = request.getParameter("firstTime");
+			String startTime = request.getParameter("startTime");
+			String endTime = request.getParameter("endTime");
+			if("".equals(firstTime)){
+				custom.setFirsttime(null);
+			}else {
+				custom.setFirsttime(formatStr2Date(firstTime));
+			}
+			if("".equals(startTime)){
+				custom.setStarttime(null);
+			}else {
+				custom.setStarttime(formatStr2Date(startTime));
+			}
+			if("".equals(endTime)){
+				custom.setEndtime(null);
+			}else {
+				custom.setEndtime(formatStr2Date(endTime));
+			}
 			String three = request.getParameter("three");
 			String glass = request.getParameter("glass");
 			String nick = request.getParameter("nick");
@@ -400,19 +417,6 @@ public class CustomController {
 				return "redirect:../405";
 			}
 			
-			if("".equals(year) && "".equals(month)){
-				year = (String) session.getAttribute("year");
-				if(year == null){
-					year = "";
-				}
-				month = (String) session.getAttribute("month");
-				if(month == null){
-					month = "";
-				}
-				session.removeAttribute("year");
-				session.removeAttribute("month");
-			}
-			
 			int totalCount = customService.selectCountByDate(year, month);
 			page.setTotalCount(totalCount);
 			page.count();
@@ -448,8 +452,6 @@ public class CustomController {
 			List<Custom> customs = customService.outPut(customids);
 			String path = session.getServletContext().getRealPath("file/");
 			String filename = ExcelUtils.writeExcel(customs, path);
-			session.setAttribute("year", year);
-			session.setAttribute("month", month);
 			
 			return "redirect:../file/download/" + filename;
 		} catch (Exception e) {
@@ -477,9 +479,6 @@ public class CustomController {
 			List<Custom> customs = customService.selectByDate(year, month);
 			String path = session.getServletContext().getRealPath("file/");
 			String filename = ExcelUtils.writeExcel(customs, path);
-			session.setAttribute("year", year);
-			session.setAttribute("month", month);
-			
 			return "redirect:../file/download/" + filename;
 		} catch (Exception e) {
 			return "redirect:../500";
@@ -493,6 +492,24 @@ public class CustomController {
 			User user = (User) session.getAttribute("loginuser");
 			if(user == null){
 				return "nologin";
+			}
+			String firstTime = request.getParameter("firstTime");
+			String startTime = request.getParameter("startTime");
+			String endTime = request.getParameter("endTime");
+			if("".equals(firstTime)){
+				custom.setFirsttime(null);
+			}else {
+				custom.setFirsttime(formatStr2Date(firstTime));
+			}
+			if("".equals(startTime)){
+				custom.setStarttime(null);
+			}else {
+				custom.setStarttime(formatStr2Date(startTime));
+			}
+			if("".equals(endTime)){
+				custom.setEndtime(null);
+			}else {
+				custom.setEndtime(formatStr2Date(endTime));
 			}
 			String three = request.getParameter("three");
 			String glass = request.getParameter("glass");

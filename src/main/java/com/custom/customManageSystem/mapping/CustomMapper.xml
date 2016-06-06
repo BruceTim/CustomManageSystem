@@ -508,15 +508,9 @@
       <if test="enginecode != null">
         engineCode = #{enginecode,jdbcType=VARCHAR},
       </if>
-      <if test="firsttime != null">
         firstTime = #{firsttime,jdbcType=DATE},
-      </if>
-      <if test="starttime != null">
         startTime = #{starttime,jdbcType=DATE},
-      </if>
-      <if test="endtime != null">
         endTime = #{endtime,jdbcType=DATE},
-      </if>
       <if test="insurance != null">
         insurance = #{insurance,jdbcType=VARCHAR},
       </if>

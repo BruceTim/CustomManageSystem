@@ -374,7 +374,13 @@ function updateCustom(action) {
 	var ince = $("#form_custom_update #insurance").val();
 	var incode = $("#form_custom_update #insurancecode").val();
 	var damage = $("#form_custom_update input[name='cardamage']:checked").val();
+	if(typeof(damage) == 'undefined' ){
+		damage = "";
+	}
 	var rob = $("#form_custom_update input[name='robbery']:checked").val();
+	if(typeof(rob) == 'undefined' ){
+		rob = "";
+	}
 	var threee = $("#form_custom_update input[name='three']:checked").val();
 	var dr = $("#form_custom_update #driver").val();
 	var pass = $("#form_custom_update #passenger").val();
@@ -382,14 +388,26 @@ function updateCustom(action) {
 	var ni = $("#form_custom_update input[name='nick']:checked").val();
 	var auto = $("#form_custom_update input[name='autoignition']:checked")
 			.val();
+	if(typeof(auto) == 'undefined' ){
+		auto = "";
+	}
 	var wad = $("#form_custom_update input[name='wading']:checked").val();
+	if(typeof(wad) == 'undefined' ){
+		wad = "";
+	}
 	var mark = $("#form_custom_update #remark").text();
 	if ($.trim(licen) == "") {
 		alert("必须填入车牌号！");
 		$("#form_custom_update #licenseplates").focus();
 		return false;
 	}
-	if ($.trim(idcard) == "" && $.trim(agencycode) == "") {
+	if ($.trim(frame) == "") {
+		alert("必须填入车架号！");
+		$("#form_custom_update #carframecode").focus();
+		return false;
+	}
+	
+/*	if ($.trim(idcard) == "" && $.trim(agencycode) == "") {
 		alert("身份证号和机构代码至少填一个！");
 		$("#form_custom_update #idcard").focus();
 		return false;
@@ -399,11 +417,7 @@ function updateCustom(action) {
 		$("#form_custom_update #phonenum").focus();
 		return false;
 	}
-	if ($.trim(frame) == "") {
-		alert("必须填入车架号！");
-		$("#form_custom_update #carframecode").focus();
-		return false;
-	}
+	
 	if ($.trim(start) == "") {
 		alert("必须填入始保时间！");
 		$("#form_custom_update #starttime").focus();
@@ -419,6 +433,7 @@ function updateCustom(action) {
 		$("#form_custom_update #insurancecode").focus();
 		return false;
 	}
+*/	
 	if (action.indexOf("updateCustom") >= 0) {
 		$.post(action, {
 			customid : cusid,
@@ -432,9 +447,9 @@ function updateCustom(action) {
 			carmodel : carModel,
 			carframecode : frame,
 			enginecode : engine,
-			firsttime : first,
-			starttime : start,
-			endtime : end,
+			firstTime : $.trim(first),
+			startTime : $.trim(start),
+			endTime : $.trim(end),
 			insurance : ince,
 			insurancecode : incode,
 			cardamage : damage,
@@ -484,9 +499,9 @@ function updateCustom(action) {
 						carmodel : carModel,
 						carframecode : frame,
 						enginecode : engine,
-						firsttime : first,
-						starttime : start,
-						endtime : end,
+						firstTime : $.trim(first),
+						startTime : $.trim(start),
+						endTime : $.trim(end),
 						insurance : ince,
 						insurancecode : incode,
 						cardamage : damage,
@@ -530,9 +545,9 @@ function updateCustom(action) {
 					carmodel : carModel,
 					carframecode : frame,
 					enginecode : engine,
-					firsttime : first,
-					starttime : start,
-					endtime : end,
+					firstTime : $.trim(first),
+					startTime : $.trim(start),
+					endTime : $.trim(end),
 					insurance : ince,
 					insurancecode : incode,
 					cardamage : damage,
