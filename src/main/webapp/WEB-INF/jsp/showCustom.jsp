@@ -182,7 +182,7 @@
 									for="phonenum">联系电话</label>
 								<div class="controls col-sm-9">
 									<input type="text" id="phonenum" class="col-sm-8" 
-										name="phonenum" required />
+										name="phonenum"/>
 								</div>
 							</div>
 							<div class="form-group">
@@ -198,7 +198,7 @@
 									for="insurer">投保人</label>
 								<div class="controls col-sm-9">
 									<input type="text" id="insurer" class="col-sm-8" 
-										name="insurer" required />
+										name="insurer" />
 								</div>
 							</div>
 							<div class="form-group">
@@ -206,7 +206,7 @@
 									for="insured">被保险人</label>
 								<div class="controls col-sm-9">
 									<input type="text" id="insured" class="col-sm-8" 
-										name="insured" required />
+										name="insured" />
 								</div>
 							</div>
 							<div class="form-group">
@@ -214,7 +214,7 @@
 									for="carmodel">车辆型号</label>
 								<div class="controls col-sm-9">
 									<input type="text" id="carmodel" class="col-sm-8" 
-										name="carmodel" required />
+										name="carmodel" />
 								</div>
 							</div>
 							<div class="form-group">
@@ -230,7 +230,7 @@
 									for="enginecode">发动机号码</label>
 								<div class="controls col-sm-9">
 									<input type="text" id="enginecode" class="col-sm-8" 
-										name="enginecode" required />
+										name="enginecode" />
 								</div>
 							</div>
 							<div class="form-group">
@@ -239,7 +239,7 @@
 								<div class="controls col-sm-9">
 									<input type="text" id="firsttime" class="col-sm-8" 
 										onfocus="MyCalendar.SetDate(this)" 
-										name="firsttime" required />
+										name="firsttime" />
 								</div>
 							</div>
 							<div class="form-group">
@@ -248,7 +248,7 @@
 								<div class="controls col-sm-9">
 									<input type="text" id="starttime" class="col-sm-8" 
 										onfocus="MyCalendar.SetDate(this)" 
-										name="starttime" required />
+										name="starttime" value=""/>
 								</div>
 							</div>
 							<div class="form-group">
@@ -257,7 +257,7 @@
 								<div class="controls col-sm-9">
 									<input type="text" id="endtime" class="col-sm-8" 
 										onfocus="MyCalendar.SetDate(this)"  
-										name="endtime" required />
+										name="endtime"  />
 								</div>
 							</div>
 							<div class="form-group">
@@ -265,7 +265,7 @@
 									for="insurance">承保单位</label>
 								<div class="controls col-sm-9">
 									<input type="text" id="insurance" class="col-sm-8" 
-										name="insurance" required />
+										name="insurance" />
 								</div>
 							</div>
 							<div class="form-group">
@@ -273,22 +273,22 @@
 									for="insurancecode">保单号</label>
 								<div class="controls col-sm-9">
 									<input type="text" id="insurancecode" class="col-sm-8" 
-										name="insurancecode" required />
+										name="insurancecode" />
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-3" style="text-align: right;">
+								<label style="text-align: right;">
 									<input type="checkbox" id="cardamage"  
 										name="cardamage" value="√"/>车损
-								</label>&nbsp;&nbsp;
+								</label>&nbsp;&nbsp;&nbsp;
 								<label>
 									<input type="checkbox" id="robbery" 
 										name="robbery" value="√"/>盗抢
-								</label>&nbsp;&nbsp;
+								</label>&nbsp;&nbsp;&nbsp;
 								<label>
 									<input type="checkbox" id="autoignition"  
 										name="autoignition" value="√" />自燃
-								</label>&nbsp;&nbsp;
+								</label>&nbsp;&nbsp;&nbsp;
 								<label>
 									<input type="checkbox" id="wading" 
 										name="wading" value="√" />涉水
@@ -332,15 +332,15 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-3" style="text-align: right;">玻璃</label>&nbsp;&nbsp;
-								<label class="col-sm-3 ">
-									<input type="radio" name="glass" value="none" />无
+								<label class="col-sm-3" style="text-align: right;">玻璃</label>
+								<label class="col-sm-2 ">
+									<input type="radio" name="glass" value="none" checked="checked"/>无
 								</label>
 								<label class="col-sm-3 ">
 									<input type="radio" name="glass" value="foreign" />进口
 								</label>
 								<label class="col-sm-3" >
-									<input type="radio" name="glass" value="domestic" checked="checked"/>国产
+									<input type="radio" name="glass" value="domestic"/>国产
 								</label>
 							</div>
 							<div class="form-group">
