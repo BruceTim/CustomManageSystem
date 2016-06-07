@@ -40,7 +40,7 @@
     customid, licensePlates, idcard, agencyCode, phoneNum, carOwner, insurer, insured, 
     carModel, carFrameCode, engineCode, firstTime, startTime, endTime, insurance, insuranceCode, 
     carDamage, robbery, three20, three30, three50, three100, three150, driver, passenger, foreignGlass, 
-    domesticGlass, nick2, nick5, nick10, nick15, autoIgnition, wading
+    domesticGlass, nick2, nick5, nick10, nick15, autoIgnition, wading, remark
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="Custom">
     select 
@@ -256,7 +256,7 @@
       three150, driver, passenger, 
       foreignGlass, domesticGlass, nick2, 
       nick5, nick10, nick15, 
-      autoIgnition, wading)
+      autoIgnition, wading, remark)
     values (#{customid,jdbcType=INTEGER}, #{licenseplates,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR}, 
       #{agencycode,jdbcType=VARCHAR}, #{phonenum,jdbcType=VARCHAR}, #{carowner,jdbcType=VARCHAR}, 
       #{insurer,jdbcType=VARCHAR}, #{insured,jdbcType=VARCHAR}, #{carmodel,jdbcType=VARCHAR}, 
@@ -268,7 +268,7 @@
       #{three150,jdbcType=VARCHAR}, #{driver,jdbcType=VARCHAR}, #{passenger,jdbcType=VARCHAR}, 
       #{foreignglass,jdbcType=VARCHAR}, #{domesticglass,jdbcType=VARCHAR}, #{nick2,jdbcType=VARCHAR}, 
       #{nick5,jdbcType=VARCHAR}, #{nick10,jdbcType=VARCHAR}, #{nick15,jdbcType=VARCHAR}, 
-      #{autoignition,jdbcType=VARCHAR}, #{wading,jdbcType=VARCHAR})
+      #{autoignition,jdbcType=VARCHAR}, #{wading,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.custom.customManageSystem.model.Custom">
     insert into custom
@@ -372,6 +372,9 @@
       <if test="wading != null">
         wading,
       </if>
+      <if test="wading != null">
+        remark,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="customid != null">
@@ -473,6 +476,9 @@
       <if test="wading != null">
         #{wading,jdbcType=VARCHAR},
       </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>	 
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.custom.customManageSystem.model.Custom">
@@ -565,6 +571,9 @@
       <if test="wading != null">
         wading = #{wading,jdbcType=VARCHAR},
       </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
     </set>
     where customid = #{customid,jdbcType=INTEGER}
   </update>
@@ -600,7 +609,8 @@
       nick10 = #{nick10,jdbcType=VARCHAR},
       nick15 = #{nick15,jdbcType=VARCHAR},
       autoIgnition = #{autoignition,jdbcType=VARCHAR},
-      wading = #{wading,jdbcType=VARCHAR}
+      wading = #{wading,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
     where customid = #{customid,jdbcType=INTEGER}
   </update>
 </mapper>
