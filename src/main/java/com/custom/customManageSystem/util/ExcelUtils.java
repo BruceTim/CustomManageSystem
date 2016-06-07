@@ -322,6 +322,9 @@ public class ExcelUtils {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 		Date date = null;
 		try {
+			if(dateStr == null || "".equals(dateStr)){
+				return null;
+			}
 			String[] mmString = dateStr.split("/");
 			if(mmString[1].length() < 2){
 				mmString[1] = "0" + mmString[1];
