@@ -26,7 +26,7 @@
 		margin-top: 20px;
 	}
 	.table th, .table td {
-		font-size: 1em;
+		font-size: 0.8em;
 		text-align: center;
 		height: 1.1em;
 	}
@@ -132,8 +132,8 @@
 									<tr align="center">
 										<th><input type="checkbox" id="selectAll"/>全选</th>
 										<th>车牌号</th>
-										<th>车架号</th>
 										<th>联系电话</th>
+										<th>车架号</th>
 										<th>保单号</th>
 										<th>终保时间</th>
 									</tr>
@@ -248,7 +248,7 @@
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-3"
-									for="enginecode">发动机号码</label>
+									for="enginecode">发动机号</label>
 								<div class="controls col-sm-9">
 									<input type="text" id="enginecode" class="col-sm-8" 
 										name="enginecode" required readonly="readonly"/>
@@ -298,22 +298,22 @@
 								<label style="text-align: right;">
 									<input type="checkbox" id="cardamage"  
 										name="cardamage" value="√"  readonly="readonly"/>&nbsp;&nbsp;车损
-								</label>&nbsp;&nbsp;&nbsp;&nbsp;
+								</label>&nbsp;&nbsp;
 								<label>
 									<input type="checkbox" id="robbery" 
 										name="robbery" value="√" readonly="readonly"/>&nbsp;&nbsp;盗抢
-								</label>&nbsp;&nbsp;&nbsp;&nbsp;
+								</label>&nbsp;&nbsp;
 								<label>
 									<input type="checkbox" id="autoignition"  
 										name="autoignition" value="√" />&nbsp;&nbsp;自燃
-								</label>&nbsp;&nbsp;&nbsp;&nbsp;
+								</label>&nbsp;&nbsp;
 								<label>
 									<input type="checkbox" id="wading" 
 										name="wading" value="√" />&nbsp;&nbsp;涉水
 								</label>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-sm-3">三者（万）</label>&nbsp;
+								<label class="control-label col-sm-3">三者(万)</label>&nbsp;
 								<label>
 									<input type="radio" name="three" value="0" />0
 								</label>&nbsp;
@@ -378,9 +378,6 @@
 								<label>
 									<input type="radio" name="nick" value="15000" />15000
 								</label>
-							</div>
-							<div class="form-group">
-								
 							</div>
 							<label class="control-label col-sm-1"
 								for="remark">备注</label>

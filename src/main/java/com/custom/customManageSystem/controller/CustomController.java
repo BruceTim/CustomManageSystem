@@ -68,12 +68,16 @@ public class CustomController {
 				for(Custom c:customs){
 					phoneBuffer = new StringBuffer();
 					phone = c.getPhonenum();
-					phones = phone.split(",");
-					for(String p:phones){
-						phoneBuffer.append(p.substring(0, 3)).append("****").append(p.substring(p.length() - 5, p.length() - 1)).append(",");
+					if(phone.length() >= 11){
+						phones = phone.split(",");
+						for(String p:phones){
+							if(p.length() >= 11){
+								phoneBuffer.append(p.substring(0, 3)).append("****").append(p.substring(p.length() - 5, p.length() - 1)).append(",");
+							}
+						}
+						phoneBuffer.deleteCharAt(phoneBuffer.length()-1);
+						c.setPhonenum(phoneBuffer.toString());
 					}
-					phoneBuffer.deleteCharAt(phoneBuffer.length()-1);
-					c.setPhonenum(phoneBuffer.toString());
 				}
 			}
 			
@@ -153,17 +157,17 @@ public class CustomController {
 			String firstTime = request.getParameter("firstTime");
 			String startTime = request.getParameter("startTime");
 			String endTime = request.getParameter("endTime");
-			if("".equals(firstTime)){
+			if(firstTime == null || "".equals(firstTime)){
 				custom.setFirsttime(null);
 			}else {
 				custom.setFirsttime(formatStr2Date(firstTime));
 			}
-			if("".equals(startTime)){
+			if(startTime == null || "".equals(startTime)){
 				custom.setStarttime(null);
 			}else {
 				custom.setStarttime(formatStr2Date(startTime));
 			}
-			if("".equals(endTime)){
+			if(endTime == null || "".equals(endTime)){
 				custom.setEndtime(null);
 			}else {
 				custom.setEndtime(formatStr2Date(endTime));
@@ -389,12 +393,16 @@ public class CustomController {
 		if(user.getRole() == 2){
 			String phone = custom.getPhonenum();
 			StringBuffer phoneBuffer = new StringBuffer();
-			String[] phones = phone.split(",");
-			for(String p:phones){
-				phoneBuffer.append(p.substring(0, 3)).append("****").append(p.substring(p.length() - 5, p.length() - 1)).append(",");
+			if(phone.length() >= 11){
+				String[] phones = phone.split(",");
+				for(String p:phones){
+					if(p.length() >= 11){
+						phoneBuffer.append(p.substring(0, 3)).append("****").append(p.substring(p.length() - 5, p.length() - 1)).append(",");
+					}
+				}
+				phoneBuffer.deleteCharAt(phoneBuffer.length()-1);
+				custom.setPhonenum(phoneBuffer.toString());
 			}
-			phoneBuffer.deleteCharAt(phoneBuffer.length()-1);
-			custom.setPhonenum(phoneBuffer.toString());
 		}
 		return JSON.toJSONString(custom);
 	}
@@ -496,17 +504,17 @@ public class CustomController {
 			String firstTime = request.getParameter("firstTime");
 			String startTime = request.getParameter("startTime");
 			String endTime = request.getParameter("endTime");
-			if("".equals(firstTime)){
+			if(firstTime == null || "".equals(firstTime)){
 				custom.setFirsttime(null);
 			}else {
 				custom.setFirsttime(formatStr2Date(firstTime));
 			}
-			if("".equals(startTime)){
+			if(startTime == null || "".equals(startTime)){
 				custom.setStarttime(null);
 			}else {
 				custom.setStarttime(formatStr2Date(startTime));
 			}
-			if("".equals(endTime)){
+			if(endTime == null || "".equals(endTime)){
 				custom.setEndtime(null);
 			}else {
 				custom.setEndtime(formatStr2Date(endTime));

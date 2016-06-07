@@ -102,7 +102,9 @@
 						      	<input type="text" id="carFrameCode" name="carFrameCode" 
 						      		placeholder="车架号"  value="${carFrameCode }" />
 						      	<button id="btn_search" style="margin-left: 20px;" class="btn btn-default">搜索</button>
-						      	<button id="btn_delete" style="margin-left: 20px;" class="btn btn-default">删除选中</button>
+						      	<c:if test="${loginuser.role < 2 }">
+						      		<button id="btn_delete" style="margin-left: 20px;" class="btn btn-default">删除选中</button>
+						      	</c:if>
 						</fieldset>
 						<fieldset align="center">
 							<legend>客户列表</legend>
@@ -227,7 +229,7 @@
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-3"
-									for="enginecode">发动机号码</label>
+									for="enginecode">发动机号</label>
 								<div class="controls col-sm-9">
 									<input type="text" id="enginecode" class="col-sm-8" 
 										name="enginecode" />
@@ -295,7 +297,7 @@
 								</label>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-sm-3">三者（万）</label>
+								<label class="control-label col-sm-3">三者(万)</label>
 								<label>
 									<input type="radio" name="three" value="0" checked="checked"/>0
 								</label>&nbsp;
