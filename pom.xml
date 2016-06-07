@@ -28,6 +28,11 @@
 		</dependency>
 		<!-- spring核心包 -->
 		<dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.7.2</version>
+        </dependency>
+		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 			<version>${spring.version}</version>
@@ -107,6 +112,12 @@
 			<artifactId>commons-dbcp</artifactId>
 			<version>1.2.2</version>
 		</dependency>
+		<!-- 导入c3p0的jar包，用来配置数据库 -->
+		<dependency>
+			<groupId>c3p0</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.1.2</version>
+		</dependency> 
 		<!-- JSTL标签类 -->
 		<dependency>
 			<groupId>javax.servlet.jsp.jstl</groupId>
