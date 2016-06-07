@@ -54,7 +54,9 @@ public class LoginController {
 				record.setLogintime(new Date());
 				String ip = request.getRemoteAddr();
 				record.setIpaddress(ip);
-				record.setUser(user);
+				record.setUid(user.getUid());
+				record.setUname(user.getUname());
+				record.setUrole(user.getRole());
 				boolean flag = loginRecordService.insert(record) > 0;
 				user.setUpwd(userpwd);
 				model.addAttribute("loginuser", user);

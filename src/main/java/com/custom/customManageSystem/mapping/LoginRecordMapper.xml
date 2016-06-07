@@ -5,24 +5,21 @@
     <id column="recordid" jdbcType="INTEGER" property="recordid" />
     <result column="logintime" property="logintime" />
     <result column="ipaddress" jdbcType="VARCHAR" property="ipaddress" />
-    <association property="user" column="userid" javaType="com.custom.customManageSystem.model.User">
-    	<id column="uid" property="uid" jdbcType="INTEGER" />
-	    <result column="uname" property="uname" jdbcType="VARCHAR" />
-	    <result column="upwd" property="upwd" jdbcType="VARCHAR" />
-	    <result column="role" property="role" jdbcType="INTEGER" />
-	    <result column="lasttime" property="lasttime" jdbcType="VARCHAR" />
-    </association>
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+	<result column="uname" property="uname" jdbcType="VARCHAR" />
+	<result column="urole" property="urole" jdbcType="INTEGER" />
+	<result column="upwd" property="upwd" jdbcType="VARCHAR" />
+	<result column="role" property="role" jdbcType="INTEGER" />
+	<result column="lasttime" property="lasttime" jdbcType="VARCHAR" />
   </resultMap>
   
   <select id="selectCountByUname" resultType="java.lang.Integer">
     select 
     count(*) 
-    from loginrecord lr 
-    left outer join user u 
-    on lr.uid = u.uid 
+    from loginrecord  
     where 1 = 1 
     <if test="uname != null and '' != uname">
-    	and u.uname LIKE CONCAT(CONCAT('%',#{uname,jdbcType=VARCHAR}),'%') 
+    	and uname LIKE CONCAT(CONCAT('%',#{uname,jdbcType=VARCHAR}),'%') 
     </if>
   </select>
   
@@ -32,17 +29,13 @@
     lr.uid as userid, 
     lr.logintime, 
     lr.ipaddress, 
-    u.uid, 
-    u.uname, 
-    u.upwd, 
-    u.role, 
-    u.lasttime 
+    lr.uid, 
+    lr.uname, 
+    lr.urole 
     from loginrecord lr 
-    left outer join user u 
-    on lr.uid = u.uid 
     where 1 = 1 
     <if test="uname != null and '' != uname">
-    	and u.uname LIKE CONCAT(CONCAT('%', #{uname, jdbcType=VARCHAR}), '%')
+    	and lr.uname LIKE CONCAT(CONCAT('%', #{uname, jdbcType=VARCHAR}), '%')
     </if>
     order by lr.logintime desc 
     limit #{page.dbIndex, jdbcType=INTEGER}, #{page.size, jdbcType=INTEGER}
@@ -62,10 +55,10 @@
   </delete>
   
   <insert id="insert" parameterType="com.custom.customManageSystem.model.LoginRecord">
-    insert into loginrecord (recordid, uid, logintime, 
+    insert into loginrecord (recordid, uid, uname, urole, logintime, 
       ipaddress)
-    values (#{recordid,jdbcType=INTEGER}, #{user.uid,jdbcType=INTEGER}, #{logintime}, 
-      #{ipaddress,jdbcType=VARCHAR})
+    values (#{recordid,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{uname,jdbcType=VARCHAR},
+    	#{urole,jdbcType=INTEGER}, #{logintime}, #{ipaddress,jdbcType=VARCHAR})
   </insert>
   
 </mapper>

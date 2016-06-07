@@ -108,15 +108,15 @@
 											<input type="checkbox" name="recordids"
 												value="${record.recordid }" />
 										</td>
-										<td>${record.user.uname }</td>
+										<td>${record.uname }</td>
 										<c:choose>
-											<c:when test="${record.user.role==0 }">
+											<c:when test="${record.urole==0 }">
 												<td>超级管理员</td>
 											</c:when>
-											<c:when test="${record.user.role==1 }">
+											<c:when test="${record.urole==1 }">
 												<td>一级管理员</td>
 											</c:when>
-											<c:when test="${record.user.role==2 }">
+											<c:when test="${record.urole==2 }">
 												<td>二级管理员</td>
 											</c:when>
 										</c:choose>

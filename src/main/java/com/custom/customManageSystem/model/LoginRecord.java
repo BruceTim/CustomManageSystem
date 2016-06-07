@@ -5,7 +5,11 @@ import java.util.Date;
 public class LoginRecord {
     private Integer recordid;
 
-    private User user;
+    private int uid;
+    
+    private String uname;
+    
+    private int urole;
 
     private Date logintime;
 
@@ -19,15 +23,31 @@ public class LoginRecord {
         this.recordid = recordid;
     }
 
-    public User getUser() {
-		return user;
+    public int getUid() {
+		return uid;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUid(int uid) {
+		this.uid = uid;
 	}
 
-    public Date getLogintime() {
+	public String getUname() {
+		return uname;
+	}
+
+	public void setUname(String uname) {
+		this.uname = uname;
+	}
+
+	public int getUrole() {
+		return urole;
+	}
+
+	public void setUrole(int urole) {
+		this.urole = urole;
+	}
+
+	public Date getLogintime() {
 		return logintime;
 	}
 
