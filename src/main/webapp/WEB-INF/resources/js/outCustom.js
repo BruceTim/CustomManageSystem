@@ -379,7 +379,7 @@ $(document)
 																			true);
 															$(
 																	"#form_custom_update #remark")
-																	.text(
+																	.val(
 																			json.remark);
 														});
 									});
@@ -406,6 +406,6 @@ var Select = {
 function changeCurrentPage(currentPage) {
 	$("#currentPage").val(currentPage);
 	var basePath = $("#basePath").val();
-	$("#form_custom").attr("action", basePath + "custom/outCustom");
+	$("#form_custom").attr("action", basePath + "/custom/outCustom");
 	$("#form_custom").submit();
 }

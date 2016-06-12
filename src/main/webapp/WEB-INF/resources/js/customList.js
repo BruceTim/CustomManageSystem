@@ -334,7 +334,7 @@ $(document)
 															}
 															$(
 																	"#form_custom_update #remark")
-																	.text(
+																	.val(
 																			json.remark);
 														});
 									});
@@ -395,7 +395,7 @@ function updateCustom(action) {
 	if(typeof(wad) == 'undefined' ){
 		wad = "";
 	}
-	var mark = $("#form_custom_update #remark").text();
+	var mark = $("#form_custom_update #remark").val();
 	if ($.trim(licen) == "") {
 		alert("必须填入车牌号！");
 		$("#form_custom_update #licenseplates").focus();
